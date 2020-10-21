@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ff7700</color>
+    <color name="colorPrimaryDark">#ff7700</color>
+    <color name="colorAccent">#4b4b4b</color>
+    <color name="edit_text_color_control">#979797</color>
+    <color name="invalid_red">#d0021b</color>
+
+    <color name="sdk_orange">#ff7700</color>
+    <color name="sdk_gray">#4b4b4b</color>
+    <color name="sdk_black">#000000</color>
+    <color name="sdk_red">#CC0000</color>
+    <color name="sdk_green">#00CC00</color>
+    <color name="sdk_blue">#0000CC</color>
+    <color name="sdk_white">#FFFFFF</color>
+</resources>

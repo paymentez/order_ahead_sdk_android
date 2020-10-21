@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="first_activity_cancel_title">Cancelar Flujo</string>
+    <string name="first_activity_cancel_message">¿Seguro que desea cancelar el flujo?</string>
+    <string name="flow_back_button">Atrás</string>
+    <string name="flow_next_button">Siguiente</string>
+    <string name="flow_finish_button">Finalizar</string>
+    <string name="accept_button">Aceptar</string>
+
+    <!-- Activity titles -->
+    <string name="activity_pmz_stores_title">Selección de tiendas</string>
+    <string name="activity_pmz_menu_title">Menú de tienda</string>
+    <string name="activity_pmz_product_title">Configuración de producto</string>
+    <string name="activity_pmz_summary_title">Carrito</string>
+    <string name="activity_pmz_result_title">Producto Comprado</string>
+
+    <string name="purchase_detail_content">Producto Comprado</string>
+    <string name="paymentez_payment_checker_checking">Procesando…</string>
+    <string name="paymentez_payment_checker_place_error_button">Error de Place</string>
+    <string name="paymentez_payment_checker_success_button">Éxito</string>
+    <string name="paymentez_payment_checker_payment_error">Error de Pago</string>
+    <string name="activity_pmz_pay_and_place_title">Procesando pago</string>
+</resources>

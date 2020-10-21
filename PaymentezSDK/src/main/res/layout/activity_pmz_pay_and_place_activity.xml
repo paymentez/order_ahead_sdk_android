@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/background"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/white_titled_toolbar" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:indeterminate="true"/>
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/paymentez_payment_checker_checking"
+            android:textColor="@color/gray_text"
+            android:textSize="20dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttons_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="17dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/payment_error"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/orange_rounded_button_selector"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="@string/paymentez_payment_checker_payment_error"
+            android:textColor="@android:color/white"
+            android:textSize="19dp" />
+
+        <TextView
+            android:id="@+id/place_error"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/orange_rounded_button_selector"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="@string/paymentez_payment_checker_place_error_button"
+            android:textColor="@android:color/white"
+            android:textSize="19dp" />
+
+        <TextView
+            android:id="@+id/success"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/orange_rounded_button_selector"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="@string/paymentez_payment_checker_success_button"
+            android:textColor="@android:color/white"
+            android:textSize="19dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

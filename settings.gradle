@@ -1,0 +1,3 @@
+include ':PaymentezSDK'
+include ':app'
+rootProject.name = "PaymentezSDKHolder"

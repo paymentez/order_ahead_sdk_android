@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">PaymentezSDKHolder</string>
+
+    <string name="bg_color_spinner_text">Color del Fondo</string>
+    <string name="text_color_spinner_text">Color del Texto</string>
+    <string name="button_color_spinner_text">Color del Botón</string>
+    <string name="background_sdk_color_picker_title">Seleccionar color del Fondo</string>
+    <string name="text_sdk_color_picker_title">Seleccione el color del Texto</string>
+    <string name="button_sdk_color_picker_title">Seleccione el color del Botón</string>
+    <string name="go_to_sdk">Ir al SDK</string>
+    <string name="randomize">Randomizar</string>
+    <string name="home_flow_success">El flujo terminó con éxito</string>
+    <string name="home_flow_cancelled">El flujo fue cancelado</string>
+    <string name="main_search_button">Búsqueda por comercios</string>
+    <string name="main_search_with_id_button">Búsqueda con Id</string>
+    <string name="main_finish_payment">FINALIZAR COMPRA</string>
+    <string name="button_text_color_spinner_text">Color del texto del botón</string>
+    <string name="main_payment_checking_success">La compra finalizó con éxito</string>
+    <string name="main_payment_checking_no_order_found">No se encontró la orden</string>
+    <string name="main_payment_checking_payment_error">Ocurrió un error con el Pago de la orden</string>
+    <string name="main_payment_checking_place_error">Ocurrió un error con el Place de la orden</string>
+    <string name="button_text_sdk_color_picker_title">Seleccione el color del Texto del Botón</string>
+    <string name="main_finish_payment_skip_summary">Finalizar sin resumen</string>
+    <string name="main_get_stores">Obtener comercios</string>
+    <string name="main_get_stores_got_stores">Se obtuvieron los comercios</string>
+    <string name="main_get_stores_on_error">Se produjo un error obteniendo los comercios</string>
+    <string name="main_show_summary_button">Ver resumen</string>
+</resources>
