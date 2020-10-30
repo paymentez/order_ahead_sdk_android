@@ -11,74 +11,40 @@ import ar.com.fennoma.paymentezsdk.models.PmzBuyer;
 import ar.com.fennoma.paymentezsdk.models.PmzError;
 import ar.com.fennoma.paymentezsdk.models.PmzOrder;
 import ar.com.fennoma.paymentezsdk.models.PmzPaymentData;
-import ar.com.fennoma.paymentezsdk.models.PmzStore;
+import ar.com.fennoma.paymentezsdk.models.PmzSession;
+import ar.com.fennoma.paymentezsdk.styles.PmzStyle;
 
 class PmzData {
 
     private static PmzData instance;
-
-    private String secret;
-    private String apiKey;
+    private PmzSession session;
 
     private PaymentezSDK.PmzSearchListener searchListener;
     private PaymentezSDK.PmzPayAndPlaceListener paymentChecker;
     private PaymentezSDK.PmzPayAndPlaceMultipleOrderListener paymentMultipleOrdersChecker;
 
-    private Integer backgroundColor;
-    private Integer textColor;
-    private Integer buttonBackgroundColor;
-    private Integer buttonTextColor;
+    private PmzStyle style;
 
     private PmzOrder order;
     private List<PmzOrder> orders;
+    private String token;
 
     public static PmzData getInstance() {
         if(instance == null) {
             instance = new PmzData();
+            instance.setStyle(new PmzStyle());
         }
         return instance;
     }
 
     private PmzData() {}
 
-    public Integer getButtonBackgroundColor() {
-        return buttonBackgroundColor;
-    }
-
-    public void setButtonBackgroundColor(Integer buttonBackgroundColor) {
-        this.buttonBackgroundColor = buttonBackgroundColor;
-    }
-
-    public Integer getButtonTextColor() {
-        return buttonTextColor;
-    }
-
-    public void setButtonTextColor(Integer buttonTextColor) {
-        this.buttonTextColor = buttonTextColor;
-    }
-
-    public Integer getTextColor() {
-        return textColor;
-    }
-
-    public void setTextColor(Integer textColor) {
-        this.textColor = textColor;
-    }
-
-    public void setBackgroundColor(int color) {
-        backgroundColor = color;
-    }
-
-    public Integer getBackgroundColor() {
-        return backgroundColor;
-    }
-
     public void startSearchWithStoreId(Context context, PmzBuyer buyer, String appOrderReference, Long storeId, PaymentezSDK.PmzSearchListener listener) {
         this.searchListener = listener;
         Intent intent;
         if(storeId != null) {
             intent = new Intent(context, PmzMenuActivity.class);
-            intent.putExtra(PmzMenuActivity.STORE_ID, storeId);
+            intent.putExtra(PmzMenuActivity.PMZ_STORE, storeId);
             intent.putExtra(PmzMenuActivity.FORCED_ID, true);
         } else {
             intent = new Intent(context, PmzStoresActivity.class);
@@ -122,7 +88,7 @@ class PmzData {
     }
 
     public void getStores(String filter, PaymentezSDK.PmzStoresListener listener) {
-        listener.onFinishedSuccessfully(PmzStore.getHardcoded());
+        //listener.onFinishedSuccessfully(PmzStore.getHardcoded());
     }
 
     public void onSearchCancel() {
@@ -169,19 +135,31 @@ class PmzData {
         this.orders = orders;
     }
 
-    public String getSecret() {
-        return secret;
+    public String getToken() {
+        return token;
     }
 
-    public void setSecret(String secret) {
-        this.secret = secret;
+    public PmzSession getSession() {
+        return session;
     }
 
-    public String getApiKey() {
-        return apiKey;
+    public void setSession(PmzSession session) {
+        this.session = session;
     }
 
-    public void setApiKey(String apiKey) {
-        this.apiKey = apiKey;
+    public boolean isInitialized() {
+        return session != null && session.isInitialized();
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public PmzStyle getStyle() {
+        return style;
+    }
+
+    public void setStyle(PmzStyle style) {
+        this.style = style;
     }
 }

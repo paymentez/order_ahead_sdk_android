@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/white_titled_toolbar" />
+        layout="@layout/white_centered_title_toolbar" />
 
     <LinearLayout
         android:layout_width="wrap_content"

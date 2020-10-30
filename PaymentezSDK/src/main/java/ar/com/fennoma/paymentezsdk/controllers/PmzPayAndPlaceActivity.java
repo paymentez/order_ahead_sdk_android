@@ -17,6 +17,7 @@ import ar.com.fennoma.paymentezsdk.R;
 import ar.com.fennoma.paymentezsdk.models.PmzError;
 import ar.com.fennoma.paymentezsdk.models.PmzOrder;
 import ar.com.fennoma.paymentezsdk.models.PmzPaymentData;
+import ar.com.fennoma.paymentezsdk.utils.ColorHelper;
 
 public class PmzPayAndPlaceActivity extends PmzBaseActivity {
 
@@ -55,32 +56,35 @@ public class PmzPayAndPlaceActivity extends PmzBaseActivity {
     }
 
     private void setViews() {
-        if(PmzData.getInstance().getBackgroundColor() != null) {
+        if(PaymentezSDK.getInstance().getStyle().getBackgroundColor() != null) {
             View background = findViewById(R.id.background);
-            background.setBackgroundColor(PmzData.getInstance().getBackgroundColor());
+            background.setBackgroundColor(PaymentezSDK.getInstance().getStyle().getBackgroundColor());
         }
-        if(PmzData.getInstance().getTextColor() != null) {
+        if(PaymentezSDK.getInstance().getStyle().getTextColor() != null) {
             TextView text = findViewById(R.id.text);
-            text.setTextColor(PmzData.getInstance().getTextColor());
+            text.setTextColor(PaymentezSDK.getInstance().getStyle().getTextColor());
             ProgressBar progress = findViewById(R.id.progress);
-            progress.getIndeterminateDrawable().setColorFilter(PmzData.getInstance().getTextColor(), PorterDuff.Mode.SRC_IN);
+            progress.getIndeterminateDrawable().setColorFilter(PaymentezSDK.getInstance().getStyle().getTextColor(), PorterDuff.Mode.SRC_IN);
         }
-        if(PmzData.getInstance().getButtonBackgroundColor() != null) {
+        if(PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor() != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                replaceRippleBackgroundColor(findViewById(R.id.payment_error));
-                replaceRippleBackgroundColor(findViewById(R.id.place_error));
-                replaceRippleBackgroundColor(findViewById(R.id.success));
+                ColorHelper.replaceButtonBackground(findViewById(R.id.payment_error),
+                        PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor());
+                ColorHelper.replaceButtonBackground(findViewById(R.id.place_error),
+                        PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor());
+                ColorHelper.replaceButtonBackground(findViewById(R.id.success),
+                        PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor());
             }
-            changeToolbarBackground(PmzData.getInstance().getButtonBackgroundColor());
+            changeToolbarBackground(PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor());
         }
-        if(PmzData.getInstance().getButtonTextColor() != null) {
+        if(PaymentezSDK.getInstance().getStyle().getButtonTextColor() != null) {
             TextView paymentError = findViewById(R.id.payment_error);
-            paymentError.setTextColor(PmzData.getInstance().getButtonTextColor());
+            paymentError.setTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
             TextView placeError = findViewById(R.id.place_error);
-            placeError.setTextColor(PmzData.getInstance().getButtonTextColor());
+            placeError.setTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
             TextView success = findViewById(R.id.success);
-            success.setTextColor(PmzData.getInstance().getButtonTextColor());
-            changeToolbarTextColor(PmzData.getInstance().getButtonTextColor());
+            success.setTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
+            changeToolbarTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
         }
     }
 

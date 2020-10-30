@@ -1,5 +1,6 @@
 package ar.com.fennoma.paymentezsdk.controllers;
 
+import android.app.Dialog;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -20,7 +21,11 @@ import ar.com.fennoma.paymentezsdk.R;
 public class PmzBaseActivity extends AppCompatActivity {
 
     protected static final int MAIN_FLOW_KEY = 1001;
+    public static final String PMZ_STORE = "store Id";
+    public static final String PMZ_ORDER_ID = "order id key";
+    public static final String PMZ_ORDER = "order key";
     private Toolbar toolbar;
+    private Dialog loadingDialog;
 
     protected void setFullTitleWithBack(String text) {
         setToolbar();
@@ -96,22 +101,36 @@ public class PmzBaseActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.enter_left_to_right, R.anim.exit_left_to_right);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    protected void replaceRippleBackgroundColor(View button) {
-        RippleDrawable background = (RippleDrawable) button.getBackground();
-        Drawable drawable = background.getDrawable(0);
-        if(drawable != null) {
-            ColorStateList myColorStateList = new ColorStateList(
-                    new int[][]{
-                            new int[]{},
-                            new int[]{android.R.attr.state_pressed},
-                    },
-                    new int[] {
-                            PmzData.getInstance().getButtonBackgroundColor(),
-                            PmzData.getInstance().getButtonBackgroundColor()
-                    }
-            );
-            drawable.setTintList(myColorStateList);
+    protected void onSessionExpired() {
+
+    }
+
+    public void showLoading() {
+        if(isActivityAlive()) {
+            hideLoading();
+            loadingDialog = new Dialog(PmzBaseActivity.this, R.style.CustomAlertDialog);
+            loadingDialog.setContentView(R.layout.dialog_loading);
+            loadingDialog.setCancelable(false);
+            loadingDialog.show();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        hideLoading();
+        super.onDestroy();
+    }
+
+    public void hideLoading() {
+        if (isActivityAlive()) {
+            if (loadingDialog != null) {
+                loadingDialog.dismiss();
+                loadingDialog = null;
+            }
+        }
+    }
+
+    private boolean isActivityAlive() {
+        return !isFinishing();
     }
 }

@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PmzBuyer implements Parcelable {
+public class PmzBuyer implements Parcelable, IJsonParsingModel {
 
     private String name;
     private String phone;

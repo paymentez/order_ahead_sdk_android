@@ -1,4 +1,4 @@
-package ar.com.fennoma.paymentezsdkholder;
+package ar.com.fennoma.paymentezsdkholder.activities;
 
 import android.view.View;
 import android.view.ViewGroup;

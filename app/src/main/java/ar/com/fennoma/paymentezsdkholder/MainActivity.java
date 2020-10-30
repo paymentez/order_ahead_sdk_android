@@ -15,6 +15,8 @@ import ar.com.fennoma.paymentezsdk.models.PmzError;
 import ar.com.fennoma.paymentezsdk.models.PmzOrder;
 import ar.com.fennoma.paymentezsdk.models.PmzPaymentData;
 import ar.com.fennoma.paymentezsdk.models.PmzStore;
+import ar.com.fennoma.paymentezsdk.styles.PmzStyle;
+import ar.com.fennoma.paymentezsdkholder.activities.BaseActivity;
 import ar.com.fennoma.paymentezsdkholder.models.Color;
 
 public class MainActivity extends BaseActivity {
@@ -79,14 +81,16 @@ public class MainActivity extends BaseActivity {
                 .setPhone("01112345678")
                 .setUserReference("user_reference");
 
+        final PmzStyle style = new PmzStyle().setBackgroundColor(bgColorSelected.getColorRes())
+                .setButtonBackgroundColor(buttonColorSelected.getColorRes())
+                .setTextColor(textColorSelected.getColorRes())
+                .setButtonTextColor(buttonTextColorSelected.getColorRes());
+
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PaymentezSDK.getInstance()
-                        .setBackgroundColor(bgColorSelected.getColorRes())
-                        .setButtonBackgroundColor(buttonColorSelected.getColorRes())
-                        .setTextColor(textColorSelected.getColorRes())
-                        .setButtonTextColor(buttonTextColorSelected.getColorRes())
+                        .setStyle(style)
                         .startSearch(MainActivity.this, buyer, "appOrderReference", new PaymentezSDK.PmzSearchListener() {
                             @Override
                             public void onFinishedSuccessfully(PmzOrder order) {
@@ -104,10 +108,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 PaymentezSDK.getInstance()
-                        .setBackgroundColor(bgColorSelected.getColorRes())
-                        .setButtonBackgroundColor(buttonColorSelected.getColorRes())
-                        .setTextColor(textColorSelected.getColorRes())
-                        .setButtonTextColor(buttonTextColorSelected.getColorRes())
+                        .setStyle(style)
                         .startSearch(MainActivity.this, buyer, "appOrderReference", 120L, new PaymentezSDK.PmzSearchListener() {
                             @Override
                             public void onFinishedSuccessfully(PmzOrder order) {
@@ -126,10 +127,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 PaymentezSDK.getInstance()
-                        .setBackgroundColor(bgColorSelected.getColorRes())
-                        .setButtonBackgroundColor(buttonColorSelected.getColorRes())
-                        .setTextColor(textColorSelected.getColorRes())
-                        .setButtonTextColor(buttonTextColorSelected.getColorRes())
+                        .setStyle(style)
                         .showSummary(MainActivity.this, "appOrderReference", PmzOrder.hardcoded(), new PaymentezSDK.PmzSearchListener() {
                             @Override
                             public void onFinishedSuccessfully(PmzOrder order) {
@@ -154,10 +152,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 PaymentezSDK.getInstance()
-                        .setBackgroundColor(bgColorSelected.getColorRes())
-                        .setButtonBackgroundColor(buttonColorSelected.getColorRes())
-                        .setTextColor(textColorSelected.getColorRes())
-                        .setButtonTextColor(buttonTextColorSelected.getColorRes())
+                        .setStyle(style)
                         .startPayAndPlace(MainActivity.this, PmzOrder.hardcoded(), paymentData, new PaymentezSDK.PmzPayAndPlaceListener() {
                             @Override
                             public void onFinishedSuccessfully(PmzOrder order) {
@@ -187,10 +182,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 PaymentezSDK.getInstance()
-                        .setBackgroundColor(bgColorSelected.getColorRes())
-                        .setButtonBackgroundColor(buttonColorSelected.getColorRes())
-                        .setTextColor(textColorSelected.getColorRes())
-                        .setButtonTextColor(buttonTextColorSelected.getColorRes())
+                        .setStyle(style)
                         .startPayAndPlace(MainActivity.this, PmzOrder.hardcoded(), paymentData, true, new PaymentezSDK.PmzPayAndPlaceListener() {
                             @Override
                             public void onFinishedSuccessfully(PmzOrder order) {

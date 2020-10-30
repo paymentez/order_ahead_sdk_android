@@ -52,6 +52,8 @@ public class PmzConfiguration implements Parcelable {
                 }
                 if(json.has("configuration_id")) {
                     configuration.setConfigurationId(json.getLong("configuration_id"));
+                } else if(json.has("id_configuration")) {
+                    configuration.setConfigurationId(json.getLong("id_configuration"));
                 }
                 if(json.has("annotations")) {
                     configuration.setAnnotations(json.getString("annotations"));
@@ -64,6 +66,18 @@ public class PmzConfiguration implements Parcelable {
             }
         }
         return configuration;
+    }
+
+    public static JSONArray getJSONFor(List<PmzConfiguration> configurations) throws JSONException {
+        JSONArray array = new JSONArray();
+        if(configurations != null) {
+            for(int i = 0; i < configurations.size(); i++) {
+                JSONObject json = new JSONObject();
+                json.put("id_configuration", configurations.get(i).getConfigurationId());
+                array.put(json);
+            }
+        }
+        return array;
     }
 
     public Long getId() {
