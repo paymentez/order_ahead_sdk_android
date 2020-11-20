@@ -3,10 +3,4 @@
     <color name="orange">#ff7700</color>
     <color name="darker_orange">#cc5f00</color>
     <color name="gray_text">#4b4b4b</color>
-    <color name="light_gray">#f0f3f5</color>
-    <color name="translucent_pink">#32f86b6b</color>
-    <color name="snack_red">#ff5f63</color>
-    <color name="edit_pencil_blue">#3177c2</color>
-    <color name="separator">#0D000000</color>
-    <color name="disabled_button">#999999</color>
 </resources>

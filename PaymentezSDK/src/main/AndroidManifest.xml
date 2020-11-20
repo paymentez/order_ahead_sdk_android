@@ -1,22 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ar.com.fennoma.paymentezsdk">
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    package="com.paymentez.plazez.sdk">
 
     <application
         android:allowBackup="true">
 
-        <activity android:name=".controllers.PmzStoresActivity" android:theme="@style/PaymentezAppTheme"/>
-        <activity android:name=".controllers.PmzMenuActivity" android:theme="@style/PaymentezAppTheme"/>
-        <activity android:name=".controllers.PmzProductActivity" android:theme="@style/PaymentezAppTheme"/>
-        <activity android:name=".controllers.PmzCartActivity" android:theme="@style/PaymentezAppTheme"/>
-        <activity android:name=".controllers.PmzSummaryActivity" android:theme="@style/PaymentezAppTheme"/>
-        <activity android:name=".controllers.PmzResultActivity" android:theme="@style/PaymentezAppTheme"/>
-        <activity android:name=".controllers.PmzPayAndPlaceActivity" android:theme="@style/PaymentezAppTheme"/>
+        <activity android:name="com.paymentez.plazez.sdk.controllers.PmzStoresActivity" android:theme="@style/PaymentezAppTheme"/>
+        <activity android:name="com.paymentez.plazez.sdk.controllers.PmzMenuActivity" android:theme="@style/PaymentezAppTheme"/>
+        <activity android:name="com.paymentez.plazez.sdk.controllers.PmzProductActivity" android:theme="@style/PaymentezAppTheme"/>
+        <activity android:name="com.paymentez.plazez.sdk.controllers.PmzSummaryActivity" android:theme="@style/PaymentezAppTheme"/>
+        <activity android:name="com.paymentez.plazez.sdk.controllers.PmzResultActivity" android:theme="@style/PaymentezAppTheme"/>
+        <activity android:name="com.paymentez.plazez.sdk.controllers.PmzPayAndPlaceActivity" android:theme="@style/PaymentezAppTheme"/>
     </application>
 
 </manifest>

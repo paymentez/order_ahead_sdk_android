@@ -3,11 +3,8 @@
     <color name="colorPrimary">#ff7700</color>
     <color name="colorPrimaryDark">#ff7700</color>
     <color name="colorAccent">#4b4b4b</color>
-
     <color name="edit_text_color_control">#979797</color>
     <color name="invalid_red">#d0021b</color>
-
-    <color name="buttons_color">#3177c2</color>
 
     <color name="sdk_orange">#ff7700</color>
     <color name="sdk_gray">#4b4b4b</color>
@@ -16,7 +13,4 @@
     <color name="sdk_green">#00CC00</color>
     <color name="sdk_blue">#0000CC</color>
     <color name="sdk_white">#FFFFFF</color>
-
-    <color name="lm_main_color">#bc323e</color>
-    <color name="lm_black">#23282C</color>
 </resources>
