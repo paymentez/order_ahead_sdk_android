@@ -8,6 +8,8 @@ public class PmzError implements Parcelable {
     public static final String PLACE_ERROR = "Place error";
     public static final String PAYMENT_ERROR = "Payment error";
     public static final String NO_ORDER_SET_ERROR = "No order set error";
+    public static final String SESSION_EXPIRED = "session expired";
+    public static final String GENERIC_SERVICE_ERROR = "Generic service error";
 
     private String type;
 
@@ -33,7 +35,8 @@ public class PmzError implements Parcelable {
         dest.writeString(this.type);
     }
 
-    public PmzError() {
+    public PmzError(PmzErrorMessage error) {
+
     }
 
     protected PmzError(Parcel in) {

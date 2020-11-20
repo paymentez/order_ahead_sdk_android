@@ -11,7 +11,7 @@
     <string name="activity_pmz_stores_title">Comercios</string>
     <string name="activity_pmz_menu_title">Menú</string>
     <string name="activity_pmz_product_title">Detalle del producto</string>
-    <string name="activity_pmz_summary_title">Carrito</string>
+    <string name="activity_pmz_cart_title">Carrito</string>
     <string name="activity_pmz_result_title">Producto Comprado</string>
 
     <string name="purchase_detail_content">Producto Comprado</string>
@@ -28,10 +28,25 @@
     <string name="activity_pmz_product_button">Agregar al carrito</string>
     <string name="pmz_product_quantity_title">Cantidad</string>
     <string name="pmz_product_total_price_title">Total</string>
-    <string name="summary_your_order_title">Tu pedido</string>
-    <string name="summary_comment_hint">Agregar comentarios del pedido</string>
-    <string name="summary_total_price_title">Total a pagar</string>
-    <string name="summary_keep_buying_button">Seguir comprando</string>
+
+    <!-- Cart -->
+    <string name="cart_your_order_title">Tu pedido</string>
+    <string name="cart_comment_hint">Agregar comentarios del pedido</string>
+    <string name="cart_total_price_title">Total a pagar</string>
+    <string name="cart_keep_buying_button">Seguir comprando</string>
     <string name="swipe_to_delete_undo_button">DESHACER</string>
     <string name="swipe_to_delete_favorite_warn">Borraste un item</string>
+    <string name="search_menu">Buscar</string>
+    <string name="cart_menu">Carrito</string>
+    <string name="search_hint">Buscar…</string>
+    <string name="no_items_on_cart">Tu carrito está vacío.</string>
+    <string name="cart_no_items_to_show">Tu carrito está vacío.</string>
+
+    <!-- Summary -->
+    <string name="activity_pmz_summary_title">Resumen de tu pedido</string>
+    <string name="summary_back_button">Volver</string>
+    <string name="pmz_summary_first_explanation">Recibe tu pedido en el mostrador del comercio</string>
+    <string name="pmz_summary_second_explanation">Aprox. en 5 minutos puedes recoger tu orden</string>
+    <string name="summary_your_order_title">Resumen</string>
+    <string name="summary_total_price_title">Total</string>
 </resources>

@@ -1,13 +1,12 @@
 package ar.com.fennoma.paymentezsdk.models;
 
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PmzAddress implements Parcelable, IJsonParsingModel {
+public class PmzAddress extends PmzModel implements Parcelable, IJsonParsingModel {
 
     private String city;
     private String country;
@@ -23,22 +22,22 @@ public class PmzAddress implements Parcelable, IJsonParsingModel {
         if(json != null) {
             try {
                 if(json.has("address_city")) {
-                    address.setCity(json.getString("address_city"));
+                    address.setCity(decode(json.getString("address_city")));
                 }
                 if(json.has("address_country")) {
-                    address.setCountry(json.getString("address_country"));
+                    address.setCountry(decode(json.getString("address_country")));
                 }
                 if(json.has("address_line1")) {
-                    address.setAddressLine1(json.getString("address_line1"));
+                    address.setAddressLine1(decode(json.getString("address_line1")));
                 }
                 if(json.has("address_line2")) {
-                    address.setAddressLine2(json.getString("address_line2"));
+                    address.setAddressLine2(decode(json.getString("address_line2")));
                 }
                 if(json.has("address_state")) {
-                    address.setState(json.getString("address_state"));
+                    address.setState(decode(json.getString("address_state")));
                 }
                 if(json.has("address_zip")) {
-                    address.setZipCode(json.getString("address_zip"));
+                    address.setZipCode(decode(json.getString("address_zip")));
                 }
                 if(json.has("address_latitude")) {
                     address.setLatitude(json.getDouble("address_latitude"));
@@ -57,25 +56,25 @@ public class PmzAddress implements Parcelable, IJsonParsingModel {
     @Override
     public JSONObject getJSON() throws JSONException {
         JSONObject params = new JSONObject();
-        params.put("address_city", Uri.encode(city, "UTF-8"));
-        params.put("address_country", Uri.encode(country, "UTF-8"));
+        params.put("address_city", encode(city));
+        params.put("address_country", encode(country));
         params.put("address_latitude", latitude);
         params.put("address_longitude", longitude);
-        params.put("address_line1", Uri.encode(addressLine1, "UTF-8"));
-        params.put("address_line2", Uri.encode(addressLine2, "UTF-8"));
-        params.put("address_state", Uri.encode(state, "UTF-8"));
+        params.put("address_line1", encode(addressLine1));
+        params.put("address_line2", encode(addressLine2));
+        params.put("address_state", encode(state));
         params.put("address_zip", zipCode);
         return params;
     }
 
     public JSONObject addToJSON(JSONObject params) throws JSONException {
-        params.put("address_city", Uri.encode(city, "UTF-8"));
-        params.put("address_country", Uri.encode(country, "UTF-8"));
+        params.put("address_city", encode(city));
+        params.put("address_country", encode(country));
         params.put("address_latitude", latitude);
         params.put("address_longitude", longitude);
-        params.put("address_line1", Uri.encode(addressLine1, "UTF-8"));
-        params.put("address_line2", Uri.encode(addressLine2, "UTF-8"));
-        params.put("address_state", Uri.encode(state, "UTF-8"));
+        params.put("address_line1", encode(addressLine1));
+        params.put("address_line2", encode(addressLine2));
+        params.put("address_state", encode(state));
         params.put("address_zip", zipCode);
         return params;
     }

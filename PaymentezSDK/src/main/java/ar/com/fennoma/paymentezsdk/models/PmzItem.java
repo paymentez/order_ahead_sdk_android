@@ -12,19 +12,20 @@ import java.util.List;
 
 import ar.com.fennoma.paymentezsdk.controllers.PaymentezSDK;
 
-public class PmzItem implements Parcelable {
+public class PmzItem extends PmzModel implements Parcelable {
 
     private Long id;
     private Long orderId;
     private Double tax;
     private String annotation;
     private Integer status;
-    private Long totalAmount;
+    private Double totalAmount;
     private Long unitAmount;
     private Integer quantity;
     private Long productId;
     private String productName;
     private Double discount;
+    private String imageUrl;
     private List<PmzConfiguration> configurations;
 
     public PmzItem(PmzProduct product, Long orderId) {
@@ -67,10 +68,10 @@ public class PmzItem implements Parcelable {
                     item.setStatus(json.getInt("status"));
                 }
                 if(json.has("annotations")) {
-                    item.setAnnotation(json.getString("annotations"));
+                    item.setAnnotation(decode(json.getString("annotations")));
                 }
                 if(json.has("total_amount")) {
-                    item.setTotalAmount(json.getLong("total_amount"));
+                    item.setTotalAmount(json.getDouble("total_amount"));
                 }
                 if(json.has("unit_amount")) {
                     item.setUnitAmount(json.getLong("unit_amount"));
@@ -87,10 +88,13 @@ public class PmzItem implements Parcelable {
                     item.setQuantity(json.getInt("quantity"));
                 }
                 if(json.has("product_name")) {
-                    item.setProductName(json.getString("product_name"));
+                    item.setProductName(decode(json.getString("product_name")));
                 }
                 if(json.has("discount") && !json.isNull("discount")) {
                     item.setDiscount(json.getDouble("discount"));
+                }
+                if(json.has("image")) {
+                    item.setImageUrl(json.getString("image"));
                 }
                 if(json.has("configurations") && !json.isNull("configurations")) {
                     item.setConfigurations(PmzConfiguration.fromJSONArray(json.getJSONArray("configurations")));
@@ -143,11 +147,11 @@ public class PmzItem implements Parcelable {
         this.status = status;
     }
 
-    public Long getTotalAmount() {
+    public Double getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(Long totalAmount) {
+    public void setTotalAmount(Double totalAmount) {
         this.totalAmount = totalAmount;
     }
 
@@ -204,10 +208,18 @@ public class PmzItem implements Parcelable {
         params.put("id_order", orderId);
         params.put("id_product", productId);
         params.put("quantity", quantity);
-        params.put("annotations", annotation);
+        params.put("annotations", encode(annotation));
         if(configurations != null) {
             params.put("configurations", PmzConfiguration.getJSONFor(configurations));
         }
+        params.put("session", PaymentezSDK.getInstance().getToken());
+        return params;
+    }
+
+    public JSONObject getJSONForDelete() throws JSONException {
+        JSONObject params = new JSONObject();
+        params.put("id_order", orderId);
+        params.put("id_order_item", id);
         params.put("session", PaymentezSDK.getInstance().getToken());
         return params;
     }
@@ -219,54 +231,6 @@ public class PmzItem implements Parcelable {
     public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(this.id);
-        dest.writeValue(this.orderId);
-        dest.writeValue(this.tax);
-        dest.writeString(this.annotation);
-        dest.writeValue(this.status);
-        dest.writeValue(this.totalAmount);
-        dest.writeValue(this.unitAmount);
-        dest.writeValue(this.quantity);
-        dest.writeValue(this.productId);
-        dest.writeString(this.productName);
-        dest.writeValue(this.discount);
-        dest.writeTypedList(this.configurations);
-    }
-
-    public PmzItem(Parcel in) {
-        this.id = (Long) in.readValue(Long.class.getClassLoader());
-        this.orderId = (Long) in.readValue(Long.class.getClassLoader());
-        this.tax = (Double) in.readValue(Double.class.getClassLoader());
-        this.annotation = in.readString();
-        this.status = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.totalAmount = (Long) in.readValue(Long.class.getClassLoader());
-        this.unitAmount = (Long) in.readValue(Long.class.getClassLoader());
-        this.quantity = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.productId = (Long) in.readValue(Long.class.getClassLoader());
-        this.productName = in.readString();
-        this.discount = (Double) in.readValue(Double.class.getClassLoader());
-        this.configurations = in.createTypedArrayList(PmzConfiguration.CREATOR);
-    }
-
-    public static final Creator<PmzItem> CREATOR = new Creator<PmzItem>() {
-        @Override
-        public PmzItem createFromParcel(Parcel source) {
-            return new PmzItem(source);
-        }
-
-        @Override
-        public PmzItem[] newArray(int size) {
-            return new PmzItem[size];
-        }
-    };
 
     public void setWith(PmzProduct product) {
 
@@ -287,4 +251,70 @@ public class PmzItem implements Parcelable {
             "  \"quantity\": 1,\n" +
             "  \"session\": \"{{token}}\"\n" +
             "}\n";
+
+    public Double getPrice() {
+        return totalAmount;
+    }
+
+    public void setConfigurations(PmzProductOrganizer organizer) {
+        this.configurations = organizer.getConfigurations();
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.id);
+        dest.writeValue(this.orderId);
+        dest.writeValue(this.tax);
+        dest.writeString(this.annotation);
+        dest.writeValue(this.status);
+        dest.writeValue(this.totalAmount);
+        dest.writeValue(this.unitAmount);
+        dest.writeValue(this.quantity);
+        dest.writeValue(this.productId);
+        dest.writeString(this.productName);
+        dest.writeValue(this.discount);
+        dest.writeString(this.imageUrl);
+        dest.writeTypedList(this.configurations);
+    }
+
+    protected PmzItem(Parcel in) {
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.orderId = (Long) in.readValue(Long.class.getClassLoader());
+        this.tax = (Double) in.readValue(Double.class.getClassLoader());
+        this.annotation = in.readString();
+        this.status = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.totalAmount = (Double) in.readValue(Double.class.getClassLoader());
+        this.unitAmount = (Long) in.readValue(Long.class.getClassLoader());
+        this.quantity = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.productId = (Long) in.readValue(Long.class.getClassLoader());
+        this.productName = in.readString();
+        this.discount = (Double) in.readValue(Double.class.getClassLoader());
+        this.imageUrl = in.readString();
+        this.configurations = in.createTypedArrayList(PmzConfiguration.CREATOR);
+    }
+
+    public static final Creator<PmzItem> CREATOR = new Creator<PmzItem>() {
+        @Override
+        public PmzItem createFromParcel(Parcel source) {
+            return new PmzItem(source);
+        }
+
+        @Override
+        public PmzItem[] newArray(int size) {
+            return new PmzItem[size];
+        }
+    };
 }

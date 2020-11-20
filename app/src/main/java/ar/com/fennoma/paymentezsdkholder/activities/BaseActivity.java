@@ -1,5 +1,6 @@
 package ar.com.fennoma.paymentezsdkholder.activities;
 
+import android.app.Dialog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -12,7 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
 
+import ar.com.fennoma.paymentezsdk.controllers.PmzBaseActivity;
+
 public class BaseActivity extends AppCompatActivity {
+
+    private Dialog loadingDialog;
 
     protected interface ISpinnerListener{
         void onSpinnerItemClicked(int position);
@@ -72,5 +77,34 @@ public class BaseActivity extends AppCompatActivity {
         public void onClick(View view) {
             toClick.performClick();
         }
+    }
+
+    public void showLoading() {
+        if(isActivityAlive()) {
+            hideLoading();
+            loadingDialog = new Dialog(this, ar.com.fennoma.paymentezsdk.R.style.CustomAlertDialog);
+            loadingDialog.setContentView(ar.com.fennoma.paymentezsdk.R.layout.dialog_loading);
+            loadingDialog.setCancelable(false);
+            loadingDialog.show();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        hideLoading();
+        super.onDestroy();
+    }
+
+    public void hideLoading() {
+        if (isActivityAlive()) {
+            if (loadingDialog != null) {
+                loadingDialog.dismiss();
+                loadingDialog = null;
+            }
+        }
+    }
+
+    private boolean isActivityAlive() {
+        return !isFinishing();
     }
 }

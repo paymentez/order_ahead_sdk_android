@@ -15,24 +15,65 @@
             android:id="@+id/toolbar"
             layout="@layout/white_centered_title_toolbar" />
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_below="@id/toolbar"
             android:layout_above="@id/buttons_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+                
+                <TextView
+                    android:id="@+id/first_explanation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pmz_summary_first_explanation"
+                    android:gravity="center"
+                    android:layout_marginRight="14dp"
+                    android:layout_marginLeft="14dp"
+                    android:textSize="16dp"
+                    android:layout_marginTop="20dp"/>
+
+                <TextView
+                    android:id="@+id/second_explanation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pmz_summary_second_explanation"
+                    android:gravity="center"
+                    android:layout_marginRight="14dp"
+                    android:layout_marginLeft="14dp"
+                    android:textSize="14dp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/image_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="19dp">
+
+                    <ImageView
+                        android:id="@+id/image"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="375:110"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent="0.3" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <RelativeLayout
                     android:id="@+id/header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginStart="15dp"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -110,42 +151,17 @@
                             android:textColor="@color/gray_text"
                             android:textSize="20dp"/>
 
-                        <TextView
-                            android:id="@+id/keep_buying"
-                            android:layout_width="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_height="21dp"
-                            android:background="@drawable/orange_rounded_button_selector"
-                            android:gravity="center"
-                            android:paddingTop="4dp"
-                            android:paddingBottom="4dp"
-                            android:paddingRight="16dp"
-                            android:paddingLeft="16dp"
-                            android:layout_centerVertical="true"
-                            android:text="@string/summary_keep_buying_button"
-                            android:textColor="@android:color/white"
-                            android:textSize="10dp" />
-
                     </RelativeLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler"
                         android:layout_marginTop="24dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="25dp"
-                        android:background="@color/gray_text"/>
-
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_marginTop="25dp"
+                        android:layout_marginTop="22dp"
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
                         android:layout_height="wrap_content">
@@ -169,41 +185,11 @@
 
                     </RelativeLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="29dp"
-                        android:layout_marginLeft="14dp"
-                        android:layout_marginRight="14dp"
-                        android:background="@color/light_gray"
-                        android:orientation="vertical">
-
-                        <EditText
-                            android:id="@+id/comment"
-                            android:layout_width="match_parent"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
-                            android:hint="@string/summary_comment_hint"
-                            android:background="@null"
-                            android:inputType="textMultiLine"
-                            android:paddingTop="11dp"
-                            android:paddingBottom="11dp"
-                            android:textColor="@color/gray_text"
-                            android:textColorHint="@color/gray_text"
-                            android:layout_height="wrap_content"/>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/gray_text"/>
-
-                    </LinearLayout>
-
                 </LinearLayout>
 
             </LinearLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <LinearLayout
             android:id="@+id/buttons_container"
@@ -224,7 +210,7 @@
                 android:gravity="center"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:text="@string/flow_finish_button"
+                android:text="@string/summary_back_button"
                 android:textColor="@android:color/white"
                 android:textSize="19dp" />
 

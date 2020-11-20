@@ -32,7 +32,7 @@ public abstract class AbstractSwiperContainerActivity<T, Y extends RecyclerView.
                 adapter.removeItem(viewHolder.getAdapterPosition());
 
                 // showing snack bar with Undo option
-                Snackbar snackbar = Snackbar.make(coordinator, getDeletedLabelWarning(), Snackbar.LENGTH_LONG);
+                /*Snackbar snackbar = Snackbar.make(coordinator, getDeletedLabelWarning(), Snackbar.LENGTH_LONG);
                 snackbar.setAction(getString(R.string.swipe_to_delete_undo_button), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -41,7 +41,7 @@ public abstract class AbstractSwiperContainerActivity<T, Y extends RecyclerView.
                     }
                 });
                 snackbar.setActionTextColor(getResources().getColor(R.color.snack_red));
-                snackbar.show();
+                snackbar.show();*/
             }
         }
     }

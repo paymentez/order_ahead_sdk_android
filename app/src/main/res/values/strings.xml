@@ -25,4 +25,6 @@
     <string name="main_get_stores_got_stores">Se obtuvieron los comercios</string>
     <string name="main_get_stores_on_error">Se produjo un error obteniendo los comercios</string>
     <string name="main_show_summary_button">Ver resumen</string>
+    <string name="main_multi_payment_button">Pagos</string>
+    <string name="main_multi_payment_success">Pagos resueltos exitosamente.</string>
 </resources>

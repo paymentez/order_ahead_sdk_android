@@ -4,14 +4,13 @@ public class PmzTitleItem implements PmzIProductDisplay {
 
     private String title;
 
-    @Override
-    public int getType() {
-        return TITLE;
+    public PmzTitleItem(PmzProductConfiguration configuration) {
+        this.title = configuration.getSubtypeName();
     }
 
     @Override
-    public PmzConfiguration getConfiguration() {
-        return null;
+    public int getType() {
+        return TITLE;
     }
 
     public String getTitle() {

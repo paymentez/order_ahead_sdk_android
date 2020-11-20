@@ -2,6 +2,7 @@ package ar.com.fennoma.paymentezsdk.styles;
 
 public class PmzStyle {
 
+    private PmzFont font = PmzFont.ROBOTO;
     private Integer backgroundColor;
     private Integer textColor;
     private Integer buttonBackgroundColor;
@@ -41,5 +42,14 @@ public class PmzStyle {
 
     public Integer getBackgroundColor() {
         return backgroundColor;
+    }
+
+    public PmzFont getFont() {
+        return font;
+    }
+
+    public PmzStyle setFont(PmzFont font) {
+        this.font = font;
+        return this;
     }
 }

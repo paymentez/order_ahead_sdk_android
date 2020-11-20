@@ -2,6 +2,7 @@ package ar.com.fennoma.paymentezsdk.controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import ar.com.fennoma.paymentezsdk.services.API;
 import ar.com.fennoma.paymentezsdk.utils.ColorHelper;
 import ar.com.fennoma.paymentezsdk.utils.DialogUtils;
 import ar.com.fennoma.paymentezsdk.utils.ImageUtils;
+import ar.com.fennoma.paymentezsdk.utils.PmzCurrencyUtils;
 
 public class PmzProductActivity extends PmzBaseActivity {
 
@@ -31,6 +33,7 @@ public class PmzProductActivity extends PmzBaseActivity {
     private PmzProduct product;
     private Long orderId;
     private PmzItem item;
+    private PmzOrder order;
 
     private ImageView image;
     private TextView title;
@@ -39,7 +42,8 @@ public class PmzProductActivity extends PmzBaseActivity {
     private TextView quantityTitle;
     private TextView totalTitle;
     private TextView totalPrice;
-    private QuantitySelector quantitySelector;
+
+    private long extras = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,7 +60,13 @@ public class PmzProductActivity extends PmzBaseActivity {
     private void setRecycler() {
         RecyclerView recycler = findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new PmzProductAdapter(this);
+        adapter = new PmzProductAdapter(this, new PmzProductAdapter.IExtrasListener() {
+            @Override
+            public void onExtrasUpdated(long extras) {
+                PmzProductActivity.this.extras = extras;
+                refreshPrice(item.getQuantity());
+            }
+        });
         recycler.setAdapter(adapter);
     }
 
@@ -67,7 +77,7 @@ public class PmzProductActivity extends PmzBaseActivity {
         price = findViewById(R.id.price);
         quantityTitle = findViewById(R.id.quantity_title);
         totalTitle = findViewById(R.id.total_title);
-        quantitySelector = findViewById(R.id.quantity_selector);
+        QuantitySelector quantitySelector = findViewById(R.id.quantity_selector);
         totalPrice = findViewById(R.id.total_price);
         quantitySelector.setListener(new QuantitySelector.PmzIQuantitySelectorListener() {
             @Override
@@ -82,9 +92,9 @@ public class PmzProductActivity extends PmzBaseActivity {
         if(product != null && product.getListPrice() != null) {
             Long listPrice = product.getListPrice();
             if(adapter != null) {
-                listPrice += adapter.getExtras();
+                listPrice += extras;
             }
-            totalPrice.setText("$".concat(String.valueOf(listPrice * quantity)));
+            totalPrice.setText(PmzCurrencyUtils.formatPrice(listPrice * quantity));
 
         }
     }
@@ -93,6 +103,7 @@ public class PmzProductActivity extends PmzBaseActivity {
         if(getIntent() != null && getIntent().getParcelableExtra(PRODUCT_KEY) != null) {
             orderId = getIntent().getLongExtra(PMZ_ORDER_ID, 0L);
             product = getIntent().getParcelableExtra(PRODUCT_KEY);
+            order = getIntent().getParcelableExtra(PMZ_ORDER);
             setDataIntoViews();
         } else {
             DialogUtils.genericError(this);
@@ -141,12 +152,12 @@ public class PmzProductActivity extends PmzBaseActivity {
             @Override
             public void onClick(View view) {
                 showLoading();
-                //API.addItemWithConfigurations(item, new API.ServiceCallback<PmzOrder>() {
-                API.addItemWithConfigurations(PmzItem.hardcoded(), new API.ServiceCallback<PmzOrder>() {
+                item.setConfigurations(adapter.getOrganizer());
+                API.addItemWithConfigurations(item, new API.ServiceCallback<PmzOrder>() {
                     @Override
                     public void onSuccess(PmzOrder response) {
                         hideLoading();
-                        sendBackOrder(response);
+                        sendBackOrder(mergeData(response));
                     }
 
                     @Override
@@ -165,6 +176,7 @@ public class PmzProductActivity extends PmzBaseActivity {
                     public void sessionExpired() {
                         hideLoading();
                         onSessionExpired();
+                        PmzData.getInstance().onSearchSessionExpired();
                     }
                 });
             }
@@ -183,5 +195,25 @@ public class PmzProductActivity extends PmzBaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         animActivityLeftToRight();
+    }
+
+    private PmzOrder mergeData(PmzOrder response) {
+        if(response != null && response.getItems() != null) {
+            for(PmzItem item: response.getItems()) {
+                if(item.getProductId().equals(PmzProductActivity.this.product.getId())) {
+                    item.setImageUrl(PmzProductActivity.this.product.getImageUrl());
+                }
+            }
+            if(order != null && order.getItems() != null) {
+                for(PmzItem oldItem: order.getItems()) {
+                    for(PmzItem newItem: response.getItems()) {
+                        if(newItem.getProductId().equals(oldItem.getProductId()) && !TextUtils.isEmpty(oldItem.getImageUrl())) {
+                            newItem.setImageUrl(oldItem.getImageUrl());
+                        }
+                    }
+                }
+            }
+        }
+        return response;
     }
 }

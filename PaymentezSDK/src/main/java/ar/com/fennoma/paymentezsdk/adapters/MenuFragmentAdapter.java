@@ -1,6 +1,7 @@
 package ar.com.fennoma.paymentezsdk.adapters;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ar.com.fennoma.paymentezsdk.R;
@@ -22,6 +24,7 @@ public class MenuFragmentAdapter extends RecyclerView.Adapter<MenuFragmentAdapte
     private final Activity activity;
     private final PmzMenuProductListener listener;
     private List<PmzProduct> products;
+    private List<PmzProduct> originalProducts;
 
     public interface PmzMenuProductListener {
         void onProductAdded(PmzProduct product);
@@ -30,6 +33,7 @@ public class MenuFragmentAdapter extends RecyclerView.Adapter<MenuFragmentAdapte
     public MenuFragmentAdapter(Activity activity, List<PmzProduct> products, PmzMenuProductListener listener) {
         this.activity = activity;
         this.products = products;
+        this.originalProducts = new ArrayList<>(products);
         this.listener = listener;
     }
 
@@ -63,6 +67,28 @@ public class MenuFragmentAdapter extends RecyclerView.Adapter<MenuFragmentAdapte
         }
         if(PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor() != null) {
             ColorHelper.replaceButtonBackground(holder.addButton, PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor());
+        }
+    }
+
+    public void setFilter(String s) {
+        if(!TextUtils.isEmpty(s)) {
+            filterStores(s);
+        } else {
+            products = new ArrayList<>(originalProducts);
+        }
+        notifyDataSetChanged();
+    }
+
+    public int size() {
+        return products.size();
+    }
+
+    private void filterStores(String filter) {
+        products = new ArrayList<>();
+        for(PmzProduct product: originalProducts) {
+            if(product != null && !TextUtils.isEmpty(product.getName()) && product.getName().toLowerCase().contains(filter.toLowerCase())) {
+                products.add(product);
+            }
         }
     }
 

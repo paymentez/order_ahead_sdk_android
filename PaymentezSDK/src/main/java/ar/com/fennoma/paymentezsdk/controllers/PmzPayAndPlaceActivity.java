@@ -2,9 +2,8 @@ package ar.com.fennoma.paymentezsdk.controllers;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -15,39 +14,55 @@ import java.util.List;
 
 import ar.com.fennoma.paymentezsdk.R;
 import ar.com.fennoma.paymentezsdk.models.PmzError;
+import ar.com.fennoma.paymentezsdk.models.PmzErrorMessage;
 import ar.com.fennoma.paymentezsdk.models.PmzOrder;
 import ar.com.fennoma.paymentezsdk.models.PmzPaymentData;
-import ar.com.fennoma.paymentezsdk.utils.ColorHelper;
+import ar.com.fennoma.paymentezsdk.services.API;
+import ar.com.fennoma.paymentezsdk.utils.DialogUtils;
 
 public class PmzPayAndPlaceActivity extends PmzBaseActivity {
 
-    public static final String PMZ_ORDER = "pmz order";
     public static final String PMZ_PAYMENT_DATA = "pmz payment data";
+    public static final String PMZ_PAYMENTS_DATA = "pmz payments data";
     public static final String SKIP_SUMMARY = "skip summary";
-    public static final String PMZ_ORDERS = "pmz order array";
 
     private PmzOrder order;
-    private List<PmzOrder> orderList;
     private PmzPaymentData paymentData;
+    private List<PmzPaymentData> payments;
+
     private boolean skipSummary;
+    private boolean multiPayment = false;
+
+    private PmzPaymentData currentPayment;
+    private int currentIndex = 0;
+    private PmzOrder orderResult;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pmz_pay_and_place_activity);
+        setFont();
         setFullTitleWOBack(getString(R.string.activity_pmz_pay_and_place_title));
         setViews();
-        handleIntent();
+        if(TextUtils.isEmpty(PmzData.getInstance().getToken())) {
+            getToken();
+        } else {
+            handleIntent();
+        }
     }
 
     private void handleIntent() {
         if(getIntent() != null && getIntent().getParcelableExtra(PMZ_ORDER) != null
-                && getIntent().getParcelableExtra(PMZ_PAYMENT_DATA) != null) {
+                && (getIntent().getParcelableExtra(PMZ_PAYMENT_DATA) != null ||
+                getIntent().getParcelableArrayListExtra(PMZ_PAYMENTS_DATA) != null)) {
             this.order = getIntent().getParcelableExtra(PMZ_ORDER);
-            this.orderList = getIntent().getParcelableExtra(PMZ_ORDERS);
             this.paymentData = getIntent().getParcelableExtra(PMZ_PAYMENT_DATA);
+            this.payments = getIntent().getParcelableArrayListExtra(PMZ_PAYMENTS_DATA);
             this.skipSummary = getIntent().getBooleanExtra(SKIP_SUMMARY, false);
-            setButtons();
+            if(payments != null) {
+                multiPayment = true;
+            }
+            handlePayment();
         } else {
             finish();
             animActivityLeftToRight();
@@ -63,75 +78,162 @@ public class PmzPayAndPlaceActivity extends PmzBaseActivity {
         if(PaymentezSDK.getInstance().getStyle().getTextColor() != null) {
             TextView text = findViewById(R.id.text);
             text.setTextColor(PaymentezSDK.getInstance().getStyle().getTextColor());
-            ProgressBar progress = findViewById(R.id.progress);
-            progress.getIndeterminateDrawable().setColorFilter(PaymentezSDK.getInstance().getStyle().getTextColor(), PorterDuff.Mode.SRC_IN);
         }
         if(PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor() != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                ColorHelper.replaceButtonBackground(findViewById(R.id.payment_error),
-                        PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor());
-                ColorHelper.replaceButtonBackground(findViewById(R.id.place_error),
-                        PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor());
-                ColorHelper.replaceButtonBackground(findViewById(R.id.success),
-                        PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor());
-            }
             changeToolbarBackground(PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor());
+            ProgressBar progress = findViewById(R.id.progress);
+            progress.getIndeterminateDrawable().setColorFilter(PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor(),
+                    PorterDuff.Mode.SRC_IN);
         }
         if(PaymentezSDK.getInstance().getStyle().getButtonTextColor() != null) {
-            TextView paymentError = findViewById(R.id.payment_error);
-            paymentError.setTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
-            TextView placeError = findViewById(R.id.place_error);
-            placeError.setTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
-            TextView success = findViewById(R.id.success);
-            success.setTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
             changeToolbarTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
         }
     }
 
-    private void setButtons() {
-        findViewById(R.id.success).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(skipSummary) {
-                    finish();
-                    if(order != null) {
-                        PmzData.getInstance().onPaymentCheckingSuccess(order);
-                    } else if(orderList != null) {
-                        PmzData.getInstance().onPaymentCheckingSuccess(orderList);
-                    }
-                } else {
-                    Intent intent = new Intent(PmzPayAndPlaceActivity.this, PmzResultActivity.class);
-                    intent.putExtra(PmzResultActivity.PMZ_ORDER, order);
-                    startActivity(intent);
-                    animActivityRightToLeft();
-                    finish();
-                }
+    private void handlePayment() {
+        if(currentIndex == 0) {
+            if(payments != null && payments.size() > 0) {
+                currentPayment = payments.get(0);
+                currentIndex = 1;
+            } else {
+                currentPayment = paymentData;
+                currentIndex = -1;
             }
-        });
-        findViewById(R.id.place_error).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-                if(order != null) {
-                    PmzData.getInstance().onPaymentCheckingError(order, new PmzError(PmzError.PLACE_ERROR));
-                } else if(orderList != null) {
-                    PmzData.getInstance().onPaymentMultipleOrdersCheckingError(orderList, new PmzError(PmzError.PLACE_ERROR));
+            doPayment();
+        } else if(currentIndex == -1 || payments.size() <= currentIndex) {
+            doPlace();
+        } else {
+            currentPayment = payments.get(currentIndex);
+            currentIndex++;
+            doPayment();
+        }
+    }
+
+    private void doPayment() {
+        if(currentPayment != null && order != null && order.getId() != null) {
+            API.pay(currentPayment, order.getId(), new API.ServiceCallback<PmzOrder>() {
+                @Override
+                public void onSuccess(PmzOrder response) {
+                    orderResult = response.mergeData(order);;
+                    handlePayment();
                 }
+
+                @Override
+                public void onError(PmzErrorMessage error) {
+                    showErrorAndBack(new PmzError(PmzError.PAYMENT_ERROR));
+                }
+
+                @Override
+                public void onFailure() {
+                    showErrorAndBack();
+                }
+
+                @Override
+                public void sessionExpired() {
+                    resolveSessionExpired();
+                }
+            });
+        } else {
+            showErrorAndBack();
+        }
+    }
+
+    private void resolveSessionExpired() {
+        finish();
+        if(multiPayment) {
+            PmzData.getInstance().onMultiplePaymentSessionExpired(order);
+        } else {
+            PmzData.getInstance().onPaymentSessionExpired(order);
+        }
+    }
+
+    private void showErrorAndBack(PmzError error) {
+        if(multiPayment) {
+            PmzData.getInstance().onMultiplePaymentOrderCheckingError(order, error);
+        } else {
+            PmzData.getInstance().onPaymentCheckingError(order, error);
+        }
+        finish();
+    }
+
+    private void showErrorAndBack() {
+        if(multiPayment) {
+            PmzData.getInstance().onMultiplePaymentOrderCheckingError(order, new PmzError(PmzError.GENERIC_SERVICE_ERROR));
+        } else {
+            PmzData.getInstance().onPaymentCheckingError(order, new PmzError(PmzError.GENERIC_SERVICE_ERROR));
+        }
+        finish();
+    }
+
+    private void doPlace() {
+        API.placeOrder(orderResult, new API.ServiceCallback<PmzOrder>() {
+            @Override
+            public void onSuccess(PmzOrder response) {
+                orderResult = response.mergeData(order);
+                showSummary();
             }
-        });
-        findViewById(R.id.payment_error).setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View view) {
-                finish();
-                if(order != null) {
-                    PmzData.getInstance().onPaymentCheckingError(order, new PmzError(PmzError.PAYMENT_ERROR));
-                } else if(orderList != null) {
-                    PmzData.getInstance().onPaymentMultipleOrdersCheckingError(orderList, new PmzError(PmzError.PAYMENT_ERROR));
-                }
+            public void onError(PmzErrorMessage error) {
+                showErrorAndBack(new PmzError(PmzError.PLACE_ERROR));
+            }
+
+            @Override
+            public void onFailure() {
+                showErrorAndBack();
+            }
+
+            @Override
+            public void sessionExpired() {
+                resolveSessionExpired();
             }
         });
     }
 
+    private void showSummary() {
+        if(!skipSummary) {
+            Intent intent = new Intent(this, PmzSummaryActivity.class);
+            intent.putExtra(PMZ_ORDER, orderResult);
+            intent.putExtra(PmzSummaryActivity.MULTIPLE_PAYMENT, multiPayment);
+            startActivity(intent);
+            animActivityRightToLeft();
+        } else {
+            if(multiPayment) {
+                PmzData.getInstance().onMultiplePaymentCheckingSuccess(orderResult);
+            } else {
+                PmzData.getInstance().onPaymentCheckingSuccess(orderResult);
+            }
+        }
+        finish();
+    }
+
     @Override
     public void onBackPressed() {}
+
+    private void getToken() {
+        API.getSession(PmzData.getInstance().getSession(), new API.ServiceCallback<String>() {
+            @Override
+            public void onSuccess(String response) {
+                PmzData.getInstance().setToken(response);
+                handleIntent();
+            }
+
+            @Override
+            public void onError(PmzErrorMessage error) {
+                DialogUtils.toast(PmzPayAndPlaceActivity.this, error.getErrorMessage());
+                finish();
+            }
+
+            @Override
+            public void onFailure() {
+                DialogUtils.genericError(PmzPayAndPlaceActivity.this);
+                finish();
+            }
+
+            @Override
+            public void sessionExpired() {
+                resolveSessionExpired();
+            }
+        });
+    }
 }

@@ -6,7 +6,9 @@ import android.os.Parcelable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PmzBuyer implements Parcelable, IJsonParsingModel {
+import ar.com.fennoma.paymentezsdk.fragments.PmzMenuFragment;
+
+public class PmzBuyer extends PmzModel implements Parcelable, IJsonParsingModel {
 
     private String name;
     private String phone;
@@ -25,7 +27,7 @@ public class PmzBuyer implements Parcelable, IJsonParsingModel {
                     buyer.setFiscalNumber(json.getString("buyer_fiscal_number"));
                 }
                 if(json.has("buyer_name")) {
-                    buyer.setName(json.getString("buyer_name"));
+                    buyer.setName(decode(json.getString("buyer_name")));
                 }
                 if(json.has("buyer_phone")) {
                     buyer.setPhone(json.getString("buyer_phone"));
@@ -44,7 +46,7 @@ public class PmzBuyer implements Parcelable, IJsonParsingModel {
         JSONObject params = new JSONObject();
         params.put("buyer_email", email);
         params.put("buyer_fiscal_number", fiscalNumber);
-        params.put("buyer_name", fiscalNumber);
+        params.put("buyer_name", encode(name));
         params.put("buyer_phone", phone);
         params.put("buyer_user_reference", userReference);
         return params;
@@ -53,7 +55,7 @@ public class PmzBuyer implements Parcelable, IJsonParsingModel {
     public JSONObject addToJSON(JSONObject params) throws JSONException {
         params.put("buyer_email", email);
         params.put("buyer_fiscal_number", fiscalNumber);
-        params.put("buyer_name", fiscalNumber);
+        params.put("buyer_name", encode(name));
         params.put("buyer_phone", phone);
         params.put("buyer_user_reference", userReference);
         return params;

@@ -1,8 +1,8 @@
 package ar.com.fennoma.paymentezsdk.models;
 
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,7 +11,7 @@ import java.util.List;
 
 import ar.com.fennoma.paymentezsdk.controllers.PaymentezSDK;
 
-public class PmzOrder implements Parcelable {
+public class PmzOrder extends PmzModel implements Parcelable {
 
     private Long id;
     private Integer status;
@@ -24,7 +24,7 @@ public class PmzOrder implements Parcelable {
     private String datePlaced;
     private String dateStarted;
     private Integer orderType;
-    private Long totalAmount;
+    private Double totalAmount;
     private String deliveryInstructions;
     private Double deliveryPrice;
     private String statusDescription;
@@ -41,18 +41,11 @@ public class PmzOrder implements Parcelable {
     private String paymentReference;
     private Integer service;
 
+    private PmzStore store;
+
     public static PmzOrder hardcoded() {
         try {
             return fromJSONObject(new JSONObject(json));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return new PmzOrder();
-    }
-
-    public static PmzOrder hardcodedForOrderStart() {
-        try {
-            return fromJSONObject(new JSONObject(orderStarterJson));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -100,10 +93,10 @@ public class PmzOrder implements Parcelable {
                     order.setOrderType(json.getInt("order_type"));
                 }
                 if(json.has("total_amount")) {
-                    order.setTotalAmount(json.getLong("total_amount"));
+                    order.setTotalAmount(json.getDouble("total_amount"));
                 }
                 if(json.has("delivery_instructions")) {
-                    order.setDeliveryInstructions(json.getString("delivery_instructions"));
+                    order.setDeliveryInstructions(decode(json.getString("delivery_instructions")));
                 }
                 if(json.has("delivery_price")) {
                     order.setDeliveryPrice(json.getDouble("delivery_price"));
@@ -115,16 +108,19 @@ public class PmzOrder implements Parcelable {
                     order.setDeliveryInstructions(json.getString("delivery_instructions"));
                 }
                 if(json.has("Annotations")) {
-                    order.setAnnotations(json.getString("Annotations"));
+                    order.setAnnotations(decode(json.getString("Annotations")));
                 }
                 if(json.has("app_order_reference")) {
-                    order.setAppOrderReference(json.getString("app_order_reference"));
+                    order.setAppOrderReference(decode(json.getString("app_order_reference")));
                 }
                 if(json.has("id_store")) {
                     order.setStoreId(json.getLong("id_store"));
                 }
                 if(json.has("type_order")) {
                     order.setTypeOrder(json.getInt("type_order"));
+                }
+                if(json.has("store")) {
+                    order.setStore(PmzStore.fromJSONObject(json.getJSONObject("store")));
                 }
                 order.setBuyer(PmzBuyer.fromJSONObject(json));
                 order.setAddress(PmzAddress.fromJSONObject(json));
@@ -162,9 +158,9 @@ public class PmzOrder implements Parcelable {
         if(address != null) {
             address.addToJSON(params);
         }
-        params.put("delivery_instructions", Uri.encode(deliveryInstructions, "UTF-8"));
-        params.put("Annotations", Uri.encode(annotations, "UTF-8"));
-        params.put("app_order_reference", Uri.encode(appOrderReference, "UTF-8"));
+        params.put("delivery_instructions", encode(deliveryInstructions));
+        params.put("Annotations", encode(annotations));
+        params.put("app_order_reference", encode(appOrderReference));
         params.put("id_store", storeId);
         params.put("type_order", typeOrder);
         params.put("session", PaymentezSDK.getInstance().getToken());
@@ -259,11 +255,11 @@ public class PmzOrder implements Parcelable {
         this.orderType = orderType;
     }
 
-    public Long getTotalAmount() {
+    public Double getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(Long totalAmount) {
+    public void setTotalAmount(Double totalAmount) {
         this.totalAmount = totalAmount;
     }
 
@@ -301,93 +297,6 @@ public class PmzOrder implements Parcelable {
 
     public PmzOrder() {
     }
-
-    private static String json = "{\n" +
-            "    \"id\": 8493,\n" +
-            "    \"status\": 0,\n" +
-            "    \"tax\": 0,\n" +
-            "    \"items\": [\n" +
-            "      {\n" +
-            "        \"id\": 15053,\n" +
-            "        \"tax\": 0,\n" +
-            "        \"annotations\": \"sin servilletas\",\n" +
-            "        \"status\": 0,\n" +
-            "        \"configurations\": [\n" +
-            "          {\n" +
-            "            \"id\": 13015,\n" +
-            "            \"annotations\": null,\n" +
-            "            \"description\": \"Ajonjolí\",\n" +
-            "            \"type\": 2,\n" +
-            "            \"cost\": 1000,\n" +
-            "            \"configuration_id\": 11520,\n" +
-            "            \"discount\": null\n" +
-            "          },\n" +
-            "          {\n" +
-            "            \"id\": 13016,\n" +
-            "            \"annotations\": null,\n" +
-            "            \"description\": \"Cubiertos\",\n" +
-            "            \"type\": 2,\n" +
-            "            \"cost\": 0,\n" +
-            "            \"configuration_id\": 11494,\n" +
-            "            \"discount\": null\n" +
-            "          }\n" +
-            "        ],\n" +
-            "        \"total_amount\": 17000,\n" +
-            "        \"unit_amount\": 16000,\n" +
-            "        \"quantity\": 1,\n" +
-            "        \"product_id\": 7351,\n" +
-            "        \"product_name\": \"Ceviche\",\n" +
-            "        \"discount\": null\n" +
-            "      }\n" +
-            "    ],\n" +
-            "    \"buyer_email\": \"breyes@paymentez.com\",\n" +
-            "    \"buyer_name\": \"Bruno Reyes\",\n" +
-            "    \"buyer_phone\": \"3212000915\",\n" +
-            "    \"buyer_fiscal_number\": \"1054092666\",\n" +
-            "    \"user_reference\": \"f6dc275d-5e64-4127-bf5c-dbbfac02aacd\",\n" +
-            "    \"order_app_reference\": \"test-1744\",\n" +
-            "    \"confirmation_code\": null,\n" +
-            "    \"table_reference\": null,\n" +
-            "    \"delivery_date\": null,\n" +
-            "    \"reserve_code\": null,\n" +
-            "    \"date_placed\": null,\n" +
-            "    \"date_started\": \"2020-09-17T10:48:24.000Z\",\n" +
-            "    \"order_type\": 0,\n" +
-            "    \"total_amount\": 17000,\n" +
-            "    \"address_line1\": \"Calle 75 20C-81\",\n" +
-            "    \"address_line2\": \"Calle 75 - 20C-81\",\n" +
-            "    \"address_city\": \"Bogotá\",\n" +
-            "    \"address_state\": \"DC\",\n" +
-            "    \"address_zip\": \"00000\",\n" +
-            "    \"address_country\": \"Colombia\",\n" +
-            "    \"address_latitude\": 4.6568103,\n" +
-            "    \"address_longitude\": -74.0561968,\n" +
-            "    \"delivery_instructions\": \"Apto 206\",\n" +
-            "    \"delivery_price\": 0,\n" +
-            "    \"status_description\": null\n" +
-            "  }";
-
-    private static String orderStarterJson = "{\n" +
-            "    \"address_city\": \"Bogotá\",\n" +
-            "    \"address_country\": \"Colombia\",\n" +
-            "    \"address_latitude\": 4.6568103,\n" +
-            "    \"address_line1\": \"Calle 75 20C-81\",\n" +
-            "    \"address_line2\": \"Calle 75 - 20C-81\",\n" +
-            "    \"address_longitude\": -74.0561968,\n" +
-            "    \"address_state\": \"DC\",\n" +
-            "    \"address_zip\": \"\",\n" +
-            "    \"delivery_instructions\": \"Apto 206\",\n" +
-            "    \"Annotations\": \"\",\n" +
-            "    \"buyer_email\": \"breyes@paymentez.com\",\n" +
-            "    \"buyer_fiscal_number\": \"1054092666\",\n" +
-            "    \"buyer_name\": \"Bruno Reyes\",\n" +
-            "    \"buyer_phone\": \"3212000915\",\n" +
-            "    \"buyer_user_reference\": \"f6dc275d-5e64-4127-bf5c-dbbfac02aacd\",\n" +
-            "    \"app_order_reference\": \"test-1744\",\n" +
-            "    \"id_store\":120,\n" +
-            "    \"session\": \"{{token}}\",\n" +
-            "    \"type_order\": 0\n" +
-            "}";
 
     public String getCurrency() {
         return currency;
@@ -437,74 +346,6 @@ public class PmzOrder implements Parcelable {
         this.address = address;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(this.id);
-        dest.writeValue(this.status);
-        dest.writeValue(this.tax);
-        dest.writeString(this.orderAppReference);
-        dest.writeString(this.confirmationCode);
-        dest.writeString(this.tableReference);
-        dest.writeString(this.deliveryDate);
-        dest.writeString(this.reserveCode);
-        dest.writeString(this.datePlaced);
-        dest.writeString(this.dateStarted);
-        dest.writeValue(this.orderType);
-        dest.writeValue(this.totalAmount);
-        dest.writeString(this.deliveryInstructions);
-        dest.writeValue(this.deliveryPrice);
-        dest.writeString(this.statusDescription);
-        dest.writeTypedList(this.items);
-        dest.writeParcelable(this.buyer, flags);
-        dest.writeParcelable(this.address, flags);
-        dest.writeString(this.currency);
-        dest.writeString(this.paymentMethodReference);
-        dest.writeString(this.paymentReference);
-        dest.writeValue(this.service);
-    }
-
-    protected PmzOrder(Parcel in) {
-        this.id = (Long) in.readValue(Long.class.getClassLoader());
-        this.status = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.tax = (Double) in.readValue(Double.class.getClassLoader());
-        this.orderAppReference = in.readString();
-        this.confirmationCode = in.readString();
-        this.tableReference = in.readString();
-        this.deliveryDate = in.readString();
-        this.reserveCode = in.readString();
-        this.datePlaced = in.readString();
-        this.dateStarted = in.readString();
-        this.orderType = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.totalAmount = (Long) in.readValue(Long.class.getClassLoader());
-        this.deliveryInstructions = in.readString();
-        this.deliveryPrice = (Double) in.readValue(Double.class.getClassLoader());
-        this.statusDescription = in.readString();
-        this.items = in.createTypedArrayList(PmzItem.CREATOR);
-        this.buyer = in.readParcelable(PmzBuyer.class.getClassLoader());
-        this.address = in.readParcelable(PmzAddress.class.getClassLoader());
-        this.currency = in.readString();
-        this.paymentMethodReference = in.readString();
-        this.paymentReference = in.readString();
-        this.service = (Integer) in.readValue(Integer.class.getClassLoader());
-    }
-
-    public static final Creator<PmzOrder> CREATOR = new Creator<PmzOrder>() {
-        @Override
-        public PmzOrder createFromParcel(Parcel source) {
-            return new PmzOrder(source);
-        }
-
-        @Override
-        public PmzOrder[] newArray(int size) {
-            return new PmzOrder[size];
-        }
-    };
-
     public String getAnnotations() {
         return annotations;
     }
@@ -536,4 +377,261 @@ public class PmzOrder implements Parcelable {
     public void setTypeOrder(Integer typeOrder) {
         this.typeOrder = typeOrder;
     }
+
+    public Long getFullPrice() {
+        long result = 0;
+        if(items != null) {
+            for(PmzItem item: items) {
+                if(item != null) {
+                    result += item.getPrice();
+                }
+            }
+        }
+        return result;
+    }
+
+    public void removeItem(PmzItem item) {
+        if(items != null) {
+            items.remove(item);
+        }
+    }
+
+    public void addItem(PmzItem itemRemoved, int positionRemoved) {
+        if(items != null) {
+            if(positionRemoved < items.size()) {
+                items.add(positionRemoved, itemRemoved);
+            } else {
+                items.add(itemRemoved);
+            }
+        }
+    }
+
+    public PmzOrder mergeData(PmzOrder oldOrder) {
+        if(getItems() != null && oldOrder != null && oldOrder.getItems() != null) {
+            for(PmzItem oldItem: oldOrder.getItems()) {
+                for(PmzItem newItem: getItems()) {
+                    if(newItem.getProductId().equals(oldItem.getProductId()) && !TextUtils.isEmpty(oldItem.getImageUrl())) {
+                        newItem.setImageUrl(oldItem.getImageUrl());
+                    }
+                }
+            }
+        }
+        if(oldOrder != null && oldOrder.getStore() != null) {
+            setStore(oldOrder.getStore());
+        }
+        return this;
+    }
+
+    public PmzStore getStore() {
+        return store;
+    }
+
+    public void setStore(PmzStore store) {
+        this.store = store;
+    }
+
+    private static String json = "{\n" +
+            "  \"id\": 8493,\n" +
+            "  \"status\": 0,\n" +
+            "  \"tax\": 0,\n" +
+            "  \"items\": [\n" +
+            "    {\n" +
+            "      \"id\": 15053,\n" +
+            "      \"tax\": 0,\n" +
+            "      \"annotations\": \"sin servilletas\",\n" +
+            "      \"status\": 0,\n" +
+            "      \"image\":\"https://middleware-prod-paymentez.s3.amazonaws.com/Menus/Logos/poke.jpg\",\n" +
+            "      \"configurations\": [\n" +
+            "        {\n" +
+            "          \"id\": 13015,\n" +
+            "          \"annotations\": null,\n" +
+            "          \"description\": \"Ajonjolí\",\n" +
+            "          \"type\": 2,\n" +
+            "          \"cost\": 1000,\n" +
+            "          \"configuration_id\": 11520,\n" +
+            "          \"discount\": null\n" +
+            "        },\n" +
+            "        {\n" +
+            "          \"id\": 13016,\n" +
+            "          \"annotations\": null,\n" +
+            "          \"description\": \"Cubiertos\",\n" +
+            "          \"type\": 2,\n" +
+            "          \"cost\": 0,\n" +
+            "          \"configuration_id\": 11494,\n" +
+            "          \"discount\": null\n" +
+            "        }\n" +
+            "      ],\n" +
+            "      \"total_amount\": 17000,\n" +
+            "      \"unit_amount\": 16000,\n" +
+            "      \"quantity\": 1,\n" +
+            "      \"product_id\": 7351,\n" +
+            "      \"product_name\": \"Ceviche\",\n" +
+            "      \"discount\": null\n" +
+            "    }\n" +
+            "  ],\n" +
+            "  \"buyer_email\": \"breyes@paymentez.com\",\n" +
+            "  \"buyer_name\": \"Bruno Reyes\",\n" +
+            "  \"buyer_phone\": \"3212000915\",\n" +
+            "  \"buyer_fiscal_number\": \"1054092666\",\n" +
+            "  \"user_reference\": \"f6dc275d-5e64-4127-bf5c-dbbfac02aacd\",\n" +
+            "  \"order_app_reference\": \"test-1744\",\n" +
+            "  \"confirmation_code\": null,\n" +
+            "  \"table_reference\": null,\n" +
+            "  \"delivery_date\": null,\n" +
+            "  \"reserve_code\": null,\n" +
+            "  \"date_placed\": null,\n" +
+            "  \"date_started\": \"2020-09-17T10:48:24.000Z\",\n" +
+            "  \"order_type\": 0,\n" +
+            "  \"total_amount\": 17000,\n" +
+            "  \"address_line1\": \"Calle 75 20C-81\",\n" +
+            "  \"address_line2\": \"Calle 75 - 20C-81\",\n" +
+            "  \"address_city\": \"Bogotá\",\n" +
+            "  \"address_state\": \"DC\",\n" +
+            "  \"address_zip\": \"00000\",\n" +
+            "  \"address_country\": \"Colombia\",\n" +
+            "  \"address_latitude\": 4.6568103,\n" +
+            "  \"address_longitude\": -74.0561968,\n" +
+            "  \"delivery_instructions\": \"Apto 206\",\n" +
+            "  \"delivery_price\": 0,\n" +
+            "  \"status_description\": null,\n" +
+            "  \"store\": {\n" +
+            "    \"id\": 97,\n" +
+            "    \"name\": \"Spoleto Centro Chia\",\n" +
+            "    \"address\": \"Avenida Pradilla 900 Este local 51\",\n" +
+            "    \"lat\": 4.8471644,\n" +
+            "    \"lon\": -74.0784931,\n" +
+            "    \"country\": \"CO\",\n" +
+            "    \"city\": \"Chía\",\n" +
+            "    \"website\": null,\n" +
+            "    \"phone\": null,\n" +
+            "    \"image\": \"https://middleware-prod-paymentez.s3.us-east-1.amazonaws.com/Menus/Logos/generic-qr.png\",\n" +
+            "    \"enable_pay_at_the_table_orders\": null,\n" +
+            "    \"type\": 8,\n" +
+            "    \"commerce_image\": \"https://middleware-paymentez.s3.amazonaws.com/Menus/Logos/spoleto.jpg\",\n" +
+            "    \"commerce_id\": 51,\n" +
+            "    \"commerce_fiscal_number\": null,\n" +
+            "    \"subsidiary_id\": null,\n" +
+            "    \"zip_code\": null,\n" +
+            "    \"company_name\": null,\n" +
+            "    \"status\": 1,\n" +
+            "    \"commerce_paymentez_app_code\": null,\n" +
+            "    \"internal_name\": null,\n" +
+            "    \"commerce_name\": \"Spoleto\",\n" +
+            "    \"show_stock\": true,\n" +
+            "    \"print\": null,\n" +
+            "    \"menu_id\": 56,\n" +
+            "    \"delivery_price\": null,\n" +
+            "    \"max_delivery_distance\": null,\n" +
+            "    \"accept_delivery\": false,\n" +
+            "    \"time_preparing\": 20,\n" +
+            "    \"extra_payments_codes\": [\n" +
+            "      {\n" +
+            "        \"method_reference\": \"PAYMENTEZ\",\n" +
+            "        \"description\": \"Pago con tarjeta\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"method_reference\": \"DEBIT\",\n" +
+            "        \"description\": \"Pago con datáfono o efectivo\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"method_reference\": \"DISCOUNT\",\n" +
+            "        \"description\": \"Descuento\"\n" +
+            "      }\n" +
+            "    ],\n" +
+            "    \"server_app_code\": \"FALTA\",\n" +
+            "    \"clien_app_code\": \"FALTA\",\n" +
+            "    \"sponsor\": null,\n" +
+            "    \"table_service_amount\": null,\n" +
+            "    \"table_service_percentage\": null\n" +
+            "  }\n" +
+            "}";
+
+    public static PmzOrder buildForOrderStart(PmzBuyer buyer, String appOrderReference, Long storeId) {
+        PmzOrder order = new PmzOrder();
+        order.setBuyer(buyer);
+        order.setAddress(new PmzAddress());
+        order.setAnnotations("");
+        order.setAppOrderReference(appOrderReference);
+        order.setStoreId(storeId);
+        order.setTypeOrder(0);
+        return order;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.id);
+        dest.writeValue(this.status);
+        dest.writeValue(this.tax);
+        dest.writeString(this.orderAppReference);
+        dest.writeString(this.confirmationCode);
+        dest.writeString(this.tableReference);
+        dest.writeString(this.deliveryDate);
+        dest.writeString(this.reserveCode);
+        dest.writeString(this.datePlaced);
+        dest.writeString(this.dateStarted);
+        dest.writeValue(this.orderType);
+        dest.writeValue(this.totalAmount);
+        dest.writeString(this.deliveryInstructions);
+        dest.writeValue(this.deliveryPrice);
+        dest.writeString(this.statusDescription);
+        dest.writeString(this.annotations);
+        dest.writeString(this.appOrderReference);
+        dest.writeValue(this.storeId);
+        dest.writeValue(this.typeOrder);
+        dest.writeTypedList(this.items);
+        dest.writeParcelable(this.buyer, flags);
+        dest.writeParcelable(this.address, flags);
+        dest.writeString(this.currency);
+        dest.writeString(this.paymentMethodReference);
+        dest.writeString(this.paymentReference);
+        dest.writeValue(this.service);
+        dest.writeParcelable(this.store, flags);
+    }
+
+    protected PmzOrder(Parcel in) {
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.status = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.tax = (Double) in.readValue(Double.class.getClassLoader());
+        this.orderAppReference = in.readString();
+        this.confirmationCode = in.readString();
+        this.tableReference = in.readString();
+        this.deliveryDate = in.readString();
+        this.reserveCode = in.readString();
+        this.datePlaced = in.readString();
+        this.dateStarted = in.readString();
+        this.orderType = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.totalAmount = (Double) in.readValue(Double.class.getClassLoader());
+        this.deliveryInstructions = in.readString();
+        this.deliveryPrice = (Double) in.readValue(Double.class.getClassLoader());
+        this.statusDescription = in.readString();
+        this.annotations = in.readString();
+        this.appOrderReference = in.readString();
+        this.storeId = (Long) in.readValue(Long.class.getClassLoader());
+        this.typeOrder = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.items = in.createTypedArrayList(PmzItem.CREATOR);
+        this.buyer = in.readParcelable(PmzBuyer.class.getClassLoader());
+        this.address = in.readParcelable(PmzAddress.class.getClassLoader());
+        this.currency = in.readString();
+        this.paymentMethodReference = in.readString();
+        this.paymentReference = in.readString();
+        this.service = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.store = in.readParcelable(PmzStore.class.getClassLoader());
+    }
+
+    public static final Creator<PmzOrder> CREATOR = new Creator<PmzOrder>() {
+        @Override
+        public PmzOrder createFromParcel(Parcel source) {
+            return new PmzOrder(source);
+        }
+
+        @Override
+        public PmzOrder[] newArray(int size) {
+            return new PmzOrder[size];
+        }
+    };
 }

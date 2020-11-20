@@ -9,6 +9,7 @@ import ar.com.fennoma.paymentezsdk.models.PmzErrorMessage;
 import ar.com.fennoma.paymentezsdk.models.PmzItem;
 import ar.com.fennoma.paymentezsdk.models.PmzMenu;
 import ar.com.fennoma.paymentezsdk.models.PmzOrder;
+import ar.com.fennoma.paymentezsdk.models.PmzPaymentData;
 import ar.com.fennoma.paymentezsdk.models.PmzSession;
 import ar.com.fennoma.paymentezsdk.models.PmzStore;
 
@@ -80,6 +81,33 @@ public class API {
             @Override
             public PmzOrder callService() throws PmzException {
                 return Services.addItemWithConfig(orderId);
+            }
+        }).execute();
+    }
+
+    public static void deleteItem(final PmzItem item, final ServiceCallback<PmzOrder> callback) {
+        new BaseTask<>(callback, new BaseTask.IServiceCaller<PmzOrder>() {
+            @Override
+            public PmzOrder callService() throws PmzException {
+                return Services.deleteItem(item);
+            }
+        }).execute();
+    }
+
+    public static void pay(final PmzPaymentData payment, final Long orderId, final ServiceCallback<PmzOrder> callback) {
+        new BaseTask<>(callback, new BaseTask.IServiceCaller<PmzOrder>() {
+            @Override
+            public PmzOrder callService() throws PmzException {
+                return Services.pay(payment, orderId);
+            }
+        }).execute();
+    }
+
+    public static void placeOrder(final PmzOrder order, final ServiceCallback<PmzOrder> callback) {
+        new BaseTask<>(callback, new BaseTask.IServiceCaller<PmzOrder>() {
+            @Override
+            public PmzOrder callService() throws PmzException {
+                return Services.placeOrder(order);
             }
         }).execute();
     }

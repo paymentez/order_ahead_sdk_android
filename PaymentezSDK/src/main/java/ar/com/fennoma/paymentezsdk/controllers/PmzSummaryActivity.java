@@ -7,39 +7,37 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ar.com.fennoma.paymentezsdk.R;
 import ar.com.fennoma.paymentezsdk.adapters.PmzSummaryAdapter;
-import ar.com.fennoma.paymentezsdk.adapters.SwiperAdapter;
-import ar.com.fennoma.paymentezsdk.models.PmzItem;
 import ar.com.fennoma.paymentezsdk.models.PmzOrder;
 import ar.com.fennoma.paymentezsdk.models.PmzStore;
+import ar.com.fennoma.paymentezsdk.styles.PmzStyle;
 import ar.com.fennoma.paymentezsdk.utils.ColorHelper;
 import ar.com.fennoma.paymentezsdk.utils.ImageUtils;
+import ar.com.fennoma.paymentezsdk.utils.PmzCurrencyUtils;
 
-public class PmzSummaryActivity extends AbstractSwiperContainerActivity<PmzItem, PmzSummaryAdapter.PmzSummaryHolder> {
+public class PmzSummaryActivity extends PmzBaseActivity {
 
-    public static final String SHOW_SUMMARY = "show summary";
+    public static final String JUST_SUMMARY = "just summary";
+    public static final String MULTIPLE_PAYMENT = "multiple payment";
 
-    private boolean justSummary = false;
-
-    private PmzOrder order;
-    private List<PmzOrder> orders;
-    private PmzStore store;
-
-    private RecyclerView recycler;
     private PmzSummaryAdapter adapter;
+
+    private boolean justCart;
+    private PmzOrder order;
+    private PmzStore store;
+    private boolean multiplePayment;
+
+    private TextView price;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pmz_summary);
+        setFont();
         setFullTitleWithBack(getString(R.string.activity_pmz_summary_title));
         setViews();
         handleIntent();
@@ -47,45 +45,39 @@ public class PmzSummaryActivity extends AbstractSwiperContainerActivity<PmzItem,
 
     private void handleIntent() {
         if(getIntent() != null) {
-            justSummary = getIntent().getBooleanExtra(SHOW_SUMMARY, false);
+            justCart = getIntent().getBooleanExtra(JUST_SUMMARY, false);
+            multiplePayment = getIntent().getBooleanExtra(MULTIPLE_PAYMENT, false);
             order = getIntent().getParcelableExtra(PMZ_ORDER);
-            orders = getIntent().getParcelableArrayListExtra(PMZ_ORDER);
-            store = getIntent().getParcelableExtra(PMZ_STORE);
+            if(order != null) {
+                store = order.getStore();
+            }
 
             if(order == null) {
                 order = new PmzOrder();
             }
-            order.setItems(new ArrayList<PmzItem>());
-            order.getItems().add(new PmzItem());
-            order.getItems().add(new PmzItem());
-            order.getItems().add(new PmzItem());
             setDataIntoViews();
         }
     }
 
     private void setDataIntoViews() {
         setStoreData();
+        calculatePrice();
         setDataIntoRecycler();
     }
 
-    private void setDataIntoRecycler() {
-        if(order == null || order.getItems() == null || order.getItems().size() == 0) {
-            recycler.setVisibility(View.GONE);
-        } else {
-            recycler.setVisibility(View.VISIBLE);
-            adapter.setItems(order.getItems());
-        }
-    }
-
     private void setStoreData() {
+        ImageView image = findViewById(R.id.image);
         ImageView icon = findViewById(R.id.icon);
         TextView title = findViewById(R.id.title);
         TextView description = findViewById(R.id.description);
 
-        ImageUtils.loadStoreImage(this, icon, store.getImageUrl());
+        if(store != null) {
+            ImageUtils.loadStoreImage(this, image, store.getImageUrl());
+            ImageUtils.loadStoreImage(this, icon, store.getImageUrl());
 
-        title.setText(store.getName());
-        description.setText(store.getCommerceName());
+            title.setText(store.getName());
+            description.setText(store.getCommerceName());
+        }
 
         if(PaymentezSDK.getInstance().getStyle().getTextColor() != null) {
             title.setTextColor(PaymentezSDK.getInstance().getStyle().getTextColor());
@@ -94,100 +86,82 @@ public class PmzSummaryActivity extends AbstractSwiperContainerActivity<PmzItem,
     }
 
     private void setViews() {
-        if(PaymentezSDK.getInstance().getStyle().getBackgroundColor() != null) {
-            View background = findViewById(R.id.background);
-            background.setBackgroundColor(PaymentezSDK.getInstance().getStyle().getBackgroundColor());
-        }
-        if(PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor() != null) {
-            changeToolbarBackground(PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                ColorHelper.replaceButtonBackground(findViewById(R.id.next),
-                        PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor());
+        PmzStyle style = PaymentezSDK.getInstance().getStyle();
+        if(style != null) {
+            if (style.getTextColor() != null) {
+                price = findViewById(R.id.price);
+                price.setTextColor(style.getTextColor());
             }
-            changeToolbarBackground(PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor());
-        }
-        if(PaymentezSDK.getInstance().getStyle().getButtonTextColor() != null) {
-            TextView next = findViewById(R.id.next);
-            TextView keepBuying = findViewById(R.id.keep_buying);
-            next.setTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
-            keepBuying.setTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
-            changeToolbarTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
+            if (style.getBackgroundColor() != null) {
+                View background = findViewById(R.id.background);
+                background.setBackgroundColor(style.getBackgroundColor());
+            }
+            if (style.getButtonBackgroundColor() != null) {
+                changeToolbarBackground(style.getButtonBackgroundColor());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ColorHelper.replaceButtonBackground(findViewById(R.id.next),
+                            style.getButtonBackgroundColor());
+                }
+                changeToolbarBackground(style.getButtonBackgroundColor());
+            }
+            if (style.getButtonTextColor() != null) {
+                TextView next = findViewById(R.id.next);
+                next.setTextColor(style.getButtonTextColor());
+                changeToolbarTextColor(style.getButtonTextColor());
+            }
         }
         setRecycler();
         setButtons();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(justCart) {
+            PmzData.getInstance().onSearchCancel();
+        } else {
+            if(multiplePayment) {
+                PmzData.getInstance().onMultiplePaymentCheckingSuccess(order);
+            } else {
+                PmzData.getInstance().onPaymentCheckingSuccess(order);
+            }
+        }
+    }
+
+    private void calculatePrice() {
+        if(order != null) {
+            price.setText(PmzCurrencyUtils.formatPrice(order.getFullPrice()));
+        } else {
+            price.setText(PmzCurrencyUtils.formatPrice(0L));
+        }
+    }
+
     private void setRecycler() {
-        recycler = findViewById(R.id.recycler);
+        RecyclerView recycler = findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new PmzSummaryAdapter(this, new PmzSummaryAdapter.IPmzSummaryAdapterListener() {
-            @Override
-            public void onItemRemoved(PmzItem item) {
-
-            }
-
-            @Override
-            public void onItemRestored(PmzItem item) {
-
-            }
-        });
+        adapter = new PmzSummaryAdapter(this);
         recycler.setAdapter(adapter);
         recycler.setNestedScrollingEnabled(false);
-        setRecyclerItemTouchHelper(recycler);
+    }
+
+    private void setDataIntoRecycler() {
+        adapter.setItems(order.getItems());
     }
 
     private void setButtons() {
         findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(justSummary) {
-                    if(order != null) {
-                        PaymentezSDK.getInstance().setOrderResult(order);
-                    } else if(orders != null) {
-                        PaymentezSDK.getInstance().setOrderResult(orders);
-                    }
+                if(justCart) {
                     PmzData.getInstance().onSearchSuccess();
+                } else if(multiplePayment) {
+                    PmzData.getInstance().onMultiplePaymentCheckingSuccess(order);
                 } else {
-                    PaymentezSDK.getInstance().setOrderResult(PmzOrder.hardcoded());
-                    setResult(RESULT_OK);
+                    PmzData.getInstance().onPaymentCheckingSuccess(order);
                 }
                 finish();
+
             }
         });
-        findViewById(R.id.keep_buying).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        if(justSummary) {
-            PmzData.getInstance().onSearchCancel();
-        }
-        animActivityLeftToRight();
-    }
-
-    @Override
-    protected String getDeletedLabelWarning() {
-        return getString(R.string.swipe_to_delete_favorite_warn);
-    }
-
-    @Override
-    protected CoordinatorLayout getCoordinatorLayout() {
-        return findViewById(R.id.coordinator);
-    }
-
-    @Override
-    protected SwiperAdapter<PmzItem, PmzSummaryAdapter.PmzSummaryHolder> getAdapter() {
-        return adapter;
-    }
-
-    @Override
-    protected List<PmzItem> getItems() {
-        return order.getItems();
     }
 }

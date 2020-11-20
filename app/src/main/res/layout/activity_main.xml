@@ -390,6 +390,7 @@
                     android:gravity="center"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
+                    android:visibility="gone"
                     android:text="@string/main_finish_payment"
                     android:textAllCaps="true"
                     android:textColor="@android:color/white"
@@ -405,6 +406,7 @@
                     android:background="@drawable/main_button_background"
                     android:gravity="center"
                     android:paddingTop="10dp"
+                    android:visibility="gone"
                     android:paddingBottom="10dp"
                     android:text="@string/main_finish_payment_skip_summary"
                     android:textAllCaps="true"
@@ -423,6 +425,22 @@
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/main_get_stores"
+                    android:textAllCaps="true"
+                    android:textColor="@android:color/white"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/multi_payment_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/main_button_background"
+                    android:gravity="center"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/main_multi_payment_button"
                     android:textAllCaps="true"
                     android:textColor="@android:color/white"
                     android:textSize="20dp" />

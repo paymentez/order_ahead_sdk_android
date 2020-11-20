@@ -6,6 +6,5 @@ public interface PmzIProductDisplay {
     int ITEM = 1;
 
     int getType();
-    PmzConfiguration getConfiguration();
 
 }

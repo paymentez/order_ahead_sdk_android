@@ -33,6 +33,7 @@ public class PaymentezSDK {
 
     public interface PmzSearchListener {
         void onFinishedSuccessfully(PmzOrder order);
+        void onError(PmzError error);
         void onCancel();
     }
 
@@ -41,9 +42,9 @@ public class PaymentezSDK {
         void onError(PmzOrder order, PmzError error);
     }
 
-    public interface PmzPayAndPlaceMultipleOrderListener {
-        void onFinishedSuccessfully(List<PmzOrder> orders);
-        void onError(List<PmzOrder> orders, PmzError error);
+    public interface MultiPaymentOrderListener {
+        void onFinishedSuccessfully(PmzOrder order);
+        void onError(PmzOrder order, PmzError error);
     }
 
     public interface PmzStoresListener {
@@ -126,17 +127,17 @@ public class PaymentezSDK {
         }
     }
 
-    public void startPayAndPlace(Context context, List<PmzOrder> orders, PmzPaymentData paymentData, PmzPayAndPlaceListener listener) {
-        if(isInitialized() && isPaymentDataUsable(paymentData)) {
+    public void startPayAndPlace(Context context, PmzOrder order, List<PmzPaymentData> payments, MultiPaymentOrderListener listener) {
+        if(isInitialized() && arePaymentsUsable(payments)) {
             checkContext(context);
-            PmzData.getInstance().startPayAndPlace(context, orders, paymentData, false, listener);
+            PmzData.getInstance().startPayAndPlace(context, order, payments, false, listener);
         }
     }
 
-    public void startPayAndPlace(Context context, List<PmzOrder> orders, PmzPaymentData paymentData, boolean skipSummary, PmzPayAndPlaceListener listener) {
-        if(isInitialized() && isPaymentDataUsable(paymentData)) {
+    public void startPayAndPlace(Context context, PmzOrder order, List<PmzPaymentData> payments, boolean skipSummary, MultiPaymentOrderListener listener) {
+        if(isInitialized() && arePaymentsUsable(payments)) {
             checkContext(context);
-            PmzData.getInstance().startPayAndPlace(context, orders, paymentData, skipSummary, listener);
+            PmzData.getInstance().startPayAndPlace(context, order, payments, skipSummary, listener);
         }
     }
 
@@ -162,6 +163,27 @@ public class PaymentezSDK {
         throw new RuntimeException("PaymentezSDK: PmzPaymentData malformed");
     }
 
+    private boolean arePaymentsUsable(List<PmzPaymentData> payments) {
+        boolean result = true;
+        if(payments != null && payments.size() > 0) {
+            for (PmzPaymentData payment : payments) {
+                if (payment == null || TextUtils.isEmpty(payment.getPaymentMethodReference())
+                        || TextUtils.isEmpty(payment.getPaymentReference())
+                        || payment.getAmount() == null
+                        || payment.getService() == null) {
+                    result = false;
+                }
+            }
+        } else {
+            result = false;
+        }
+        if(!result) {
+            throw new RuntimeException("PaymentezSDK: PmzPaymentData malformed");
+        } else {
+            return true;
+        }
+    }
+
     private boolean checkContext(Context context) {
         if(context == null) {
             throw new RuntimeException("PaymentezSDK has no context provided");
@@ -177,9 +199,5 @@ public class PaymentezSDK {
 
     public void setOrderResult(PmzOrder order) {
         PmzData.getInstance().setOrderResult(order);
-    }
-
-    public void setOrderResult(List<PmzOrder> orders) {
-        PmzData.getInstance().setOrderResult(orders);
     }
 }

@@ -26,6 +26,8 @@ public class PmzProductConfiguration implements Parcelable {
     private Long subtypeDisplayOrder;
     private Boolean isDefault;
 
+    private boolean checked = false;
+
     public static List<PmzProductConfiguration> fromJSONArray(JSONArray array) {
         List<PmzProductConfiguration> result = new ArrayList<>();
         if(array != null) {
@@ -191,6 +193,10 @@ public class PmzProductConfiguration implements Parcelable {
         return isDefault;
     }
 
+    public boolean isDefault() {
+        return isDefault == null ? false : isDefault;
+    }
+
     public void setDefault(Boolean aDefault) {
         isDefault = aDefault;
     }
@@ -247,4 +253,12 @@ public class PmzProductConfiguration implements Parcelable {
             return new PmzProductConfiguration[size];
         }
     };
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 }

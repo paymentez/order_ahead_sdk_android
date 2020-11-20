@@ -1,6 +1,7 @@
 package ar.com.fennoma.paymentezsdk.adapters;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -22,6 +23,7 @@ public class PmzStoresAdapter extends RecyclerView.Adapter<PmzStoresAdapter.PmzS
     private final Activity activity;
     private final PmzStoreItemListener listener;
     private List<PmzStore> stores;
+    private List<PmzStore> originalStores;
 
     public interface PmzStoreItemListener {
         void onStoreClicked(PmzStore store);
@@ -61,6 +63,24 @@ public class PmzStoresAdapter extends RecyclerView.Adapter<PmzStoresAdapter.PmzS
         });
     }
 
+    public void setFilter(String s) {
+        if(!TextUtils.isEmpty(s)) {
+            filterStores(s);
+        } else {
+            stores = new ArrayList<>(originalStores);
+        }
+        notifyDataSetChanged();
+    }
+
+    private void filterStores(String filter) {
+        stores = new ArrayList<>();
+        for(PmzStore store: originalStores) {
+            if(store != null && !TextUtils.isEmpty(store.getName()) && store.getName().toLowerCase().contains(filter.toLowerCase())) {
+                stores.add(store);
+            }
+        }
+    }
+
     @Override
     public int getItemCount() {
         return stores.size();
@@ -68,6 +88,7 @@ public class PmzStoresAdapter extends RecyclerView.Adapter<PmzStoresAdapter.PmzS
 
     public void setStores(List<PmzStore> stores) {
         this.stores = stores;
+        this.originalStores = new ArrayList<>(stores);
         notifyDataSetChanged();
     }
 

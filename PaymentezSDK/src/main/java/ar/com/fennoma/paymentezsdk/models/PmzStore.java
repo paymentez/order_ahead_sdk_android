@@ -60,7 +60,7 @@ public class PmzStore implements Parcelable {
         return store;
     }
 
-    private static PmzStore fromJSONObject(JSONObject json) {
+    public static PmzStore fromJSONObject(JSONObject json) {
         PmzStore store = new PmzStore();
         if(json != null) {
             try {
