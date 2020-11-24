@@ -27,4 +27,5 @@
     <string name="main_show_summary_button">Ver resumen</string>
     <string name="main_multi_payment_button">Pagos</string>
     <string name="main_multi_payment_success">Pagos resueltos exitosamente.</string>
+    <string name="main_payment_session_expired">Sesión expirada.</string>
 </resources>

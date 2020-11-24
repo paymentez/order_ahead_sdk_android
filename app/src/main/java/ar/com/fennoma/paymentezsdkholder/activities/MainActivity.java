@@ -88,6 +88,15 @@ public class MainActivity extends BaseActivity {
                             }
 
                             @Override
+                            public void onError(PmzError error) {
+                                if(error.getType().equals(PmzError.SESSION_EXPIRED)) {
+                                    Toast.makeText(MainActivity.this, R.string.main_payment_session_expired, Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(MainActivity.this, R.string.generic_error, Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
                             public void onCancel() {
                                 Toast.makeText(MainActivity.this, getString(R.string.home_flow_cancelled), Toast.LENGTH_LONG).show();
                             }
@@ -107,6 +116,15 @@ public class MainActivity extends BaseActivity {
                             }
 
                             @Override
+                            public void onError(PmzError error) {
+                                if(error.getType().equals(PmzError.SESSION_EXPIRED)) {
+                                    Toast.makeText(MainActivity.this, R.string.main_payment_session_expired, Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(MainActivity.this, R.string.generic_error, Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
                             public void onCancel() {
                                 Toast.makeText(MainActivity.this, getString(R.string.home_flow_cancelled), Toast.LENGTH_LONG).show();
                             }
@@ -123,6 +141,15 @@ public class MainActivity extends BaseActivity {
                             @Override
                             public void onFinishedSuccessfully(PmzOrder order) {
                                 Toast.makeText(MainActivity.this, getString(R.string.home_flow_success), Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onError(PmzError error) {
+                                if(error.getType().equals(PmzError.SESSION_EXPIRED)) {
+                                    Toast.makeText(MainActivity.this, R.string.main_payment_session_expired, Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(MainActivity.this, R.string.generic_error, Toast.LENGTH_LONG).show();
+                                }
                             }
 
                             @Override
@@ -168,6 +195,9 @@ public class MainActivity extends BaseActivity {
                             @Override
                             public void onError(PmzOrder order, PmzError error) {
                                 switch (error.getType()) {
+                                    case PmzError.SESSION_EXPIRED:
+                                        Toast.makeText(MainActivity.this, R.string.main_payment_session_expired, Toast.LENGTH_LONG).show();
+                                        break;
                                     case PmzError.PAYMENT_ERROR:
                                         Toast.makeText(MainActivity.this, R.string.main_payment_checking_payment_error, Toast.LENGTH_LONG).show();
                                         break;
