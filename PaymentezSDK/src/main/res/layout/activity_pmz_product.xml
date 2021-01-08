@@ -109,7 +109,7 @@
                     android:textStyle="bold"
                     android:text="@string/pmz_product_total_price_title"/>
 
-                <ar.com.fennoma.paymentezsdk.controls.QuantitySelector
+                <com.paymentez.plazez.sdk.controls.QuantitySelector
                     android:id="@+id/quantity_selector"
                     android:layout_marginTop="10dp"
                     android:layout_below="@+id/quantity_title"

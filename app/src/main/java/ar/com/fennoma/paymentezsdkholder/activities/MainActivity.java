@@ -9,14 +9,14 @@ import android.widget.Toast;
 import java.util.List;
 import java.util.Random;
 
-import ar.com.fennoma.paymentezsdk.controllers.PaymentezSDK;
-import ar.com.fennoma.paymentezsdk.models.PmzBuyer;
-import ar.com.fennoma.paymentezsdk.models.PmzError;
-import ar.com.fennoma.paymentezsdk.models.PmzOrder;
-import ar.com.fennoma.paymentezsdk.models.PmzPaymentData;
-import ar.com.fennoma.paymentezsdk.models.PmzStore;
-import ar.com.fennoma.paymentezsdk.styles.PmzFont;
-import ar.com.fennoma.paymentezsdk.styles.PmzStyle;
+import com.paymentez.plazez.sdk.controllers.PaymentezSDK;
+import com.paymentez.plazez.sdk.models.PmzBuyer;
+import com.paymentez.plazez.sdk.models.PmzError;
+import com.paymentez.plazez.sdk.models.PmzOrder;
+import com.paymentez.plazez.sdk.models.PmzPaymentData;
+import com.paymentez.plazez.sdk.models.PmzStore;
+import com.paymentez.plazez.sdk.styles.PmzFont;
+import com.paymentez.plazez.sdk.styles.PmzStyle;
 import ar.com.fennoma.paymentezsdkholder.R;
 import ar.com.fennoma.paymentezsdkholder.models.Color;
 

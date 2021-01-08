@@ -13,8 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
 
-import ar.com.fennoma.paymentezsdk.controllers.PmzBaseActivity;
-
 public class BaseActivity extends AppCompatActivity {
 
     private Dialog loadingDialog;
@@ -82,8 +80,8 @@ public class BaseActivity extends AppCompatActivity {
     public void showLoading() {
         if(isActivityAlive()) {
             hideLoading();
-            loadingDialog = new Dialog(this, ar.com.fennoma.paymentezsdk.R.style.CustomAlertDialog);
-            loadingDialog.setContentView(ar.com.fennoma.paymentezsdk.R.layout.dialog_loading);
+            loadingDialog = new Dialog(this, com.paymentez.plazez.sdk.R.style.CustomAlertDialog);
+            loadingDialog.setContentView(com.paymentez.plazez.sdk.R.layout.dialog_loading);
             loadingDialog.setCancelable(false);
             loadingDialog.show();
         }
