@@ -176,6 +176,9 @@ public class PmzStoresActivity extends PmzBaseActivity {
 
         final MenuItem myActionMenuItem = menu.findItem( R.id.search);
         searchView = (SearchView) myActionMenuItem.getActionView();
+        if(!TextUtils.isEmpty(storesFilter)) {
+            searchView.setQuery(storesFilter, false);
+        }
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -187,6 +190,21 @@ public class PmzStoresActivity extends PmzBaseActivity {
             public boolean onQueryTextChange(String s) {
                 adapter.setFilter(s);
                 return false;
+            }
+        });
+        myActionMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                if(!TextUtils.isEmpty(storesFilter)) {
+                    searchView.onActionViewExpanded();
+                    searchView.setQuery(storesFilter, false);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                return true;
             }
         });
         EditText editText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
