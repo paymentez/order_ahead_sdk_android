@@ -45,7 +45,7 @@
     <!-- Summary -->
     <string name="activity_pmz_summary_title">Order summary</string>
     <string name="summary_back_button">Continue</string>
-    <string name="pmz_summary_first_explanation">Receive your oder at the store counter</string>
+    <string name="pmz_summary_first_explanation">Receive your order at the store counter</string>
     <string name="pmz_summary_second_explanation">Your order will be ready in approximately 5 minutes</string>
     <string name="summary_your_order_title">Summary</string>
     <string name="summary_total_price_title">Total</string>
