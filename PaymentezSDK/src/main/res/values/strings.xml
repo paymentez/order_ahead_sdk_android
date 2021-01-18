@@ -2,16 +2,16 @@
 <resources>
     <string name="first_activity_cancel_title">Cancelar Flujo</string>
     <string name="first_activity_cancel_message">¿Seguro que desea cancelar el flujo?</string>
-    <string name="flow_back_button">Atrás</string>
-    <string name="flow_next_button">Siguiente</string>
-    <string name="flow_finish_button">Ir a pagar</string>
-    <string name="accept_button">Aceptar</string>
+    <string name="flow_back_button">Back</string>
+    <string name="flow_next_button">Next</string>
+    <string name="flow_finish_button">Proceed to checkout</string>
+    <string name="accept_button">Accept</string>
 
     <!-- Activity titles -->
-    <string name="activity_pmz_stores_title">Comercios</string>
-    <string name="activity_pmz_menu_title">Menú</string>
-    <string name="activity_pmz_product_title">Detalle del producto</string>
-    <string name="activity_pmz_cart_title">Carrito</string>
+    <string name="activity_pmz_stores_title">Stores</string>
+    <string name="activity_pmz_menu_title">Menu</string>
+    <string name="activity_pmz_product_title">Product details</string>
+    <string name="activity_pmz_cart_title">Shopping cart</string>
     <string name="activity_pmz_result_title">Producto Comprado</string>
 
     <string name="purchase_detail_content">Producto Comprado</string>
@@ -23,17 +23,17 @@
     <string name="generic_error">Ha ocurrido un error inesperado.</string>
 
     <!-- Menu -->
-    <string name="pmz_menu_chart_button">Ir al carrito</string>
+    <string name="pmz_menu_chart_button">View cart</string>
     <string name="pmz_menu_item_add_button">Agregar</string>
-    <string name="activity_pmz_product_button">Agregar al carrito</string>
-    <string name="pmz_product_quantity_title">Cantidad</string>
+    <string name="activity_pmz_product_button">Add to cart</string>
+    <string name="pmz_product_quantity_title">Quantity</string>
     <string name="pmz_product_total_price_title">Total</string>
 
     <!-- Cart -->
-    <string name="cart_your_order_title">Tu pedido</string>
-    <string name="cart_comment_hint">Agregar comentarios del pedido</string>
-    <string name="cart_total_price_title">Total a pagar</string>
-    <string name="cart_keep_buying_button">Seguir comprando</string>
+    <string name="cart_your_order_title">Your order</string>
+    <string name="cart_comment_hint">Add any order instructions</string>
+    <string name="cart_total_price_title">Total</string>
+    <string name="cart_keep_buying_button">Continue shopping</string>
     <string name="swipe_to_delete_undo_button">DESHACER</string>
     <string name="swipe_to_delete_favorite_warn">Borraste un item</string>
     <string name="search_menu">Buscar</string>
@@ -43,10 +43,10 @@
     <string name="cart_no_items_to_show">Tu carrito está vacío.</string>
 
     <!-- Summary -->
-    <string name="activity_pmz_summary_title">Resumen de tu pedido</string>
-    <string name="summary_back_button">Volver</string>
-    <string name="pmz_summary_first_explanation">Recibe tu pedido en el mostrador del comercio</string>
-    <string name="pmz_summary_second_explanation">Aprox. en 5 minutos puedes recoger tu orden</string>
-    <string name="summary_your_order_title">Resumen</string>
+    <string name="activity_pmz_summary_title">Order summary</string>
+    <string name="summary_back_button">Continue</string>
+    <string name="pmz_summary_first_explanation">Receive your oder at the store counter</string>
+    <string name="pmz_summary_second_explanation">Your order will be ready in approximately 5 minutes</string>
+    <string name="summary_your_order_title">Summary</string>
     <string name="summary_total_price_title">Total</string>
 </resources>
