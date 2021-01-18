@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="first_activity_cancel_title">Cancelar Flujo</string>
+    <string name="first_activity_cancel_message">¿Seguro que desea cancelar el flujo?</string>
+    <string name="flow_back_button">Atrás</string>
+    <string name="flow_next_button">Siguiente</string>
+    <string name="flow_finish_button">Ir a pagar</string>
+    <string name="accept_button">Aceptar</string>
+
+    <!-- Activity titles -->
+    <string name="activity_pmz_stores_title">Comercios</string>
+    <string name="activity_pmz_menu_title">Menú</string>
+    <string name="activity_pmz_product_title">Detalles del producto</string>
+    <string name="activity_pmz_cart_title">Carrito de compras</string>
+    <string name="activity_pmz_result_title">Producto Comprado</string>
+
+    <string name="purchase_detail_content">Producto Comprado</string>
+    <string name="paymentez_payment_checker_checking">Procesando…</string>
+    <string name="paymentez_payment_checker_place_error_button">Error de Place</string>
+    <string name="paymentez_payment_checker_success_button">Éxito</string>
+    <string name="paymentez_payment_checker_payment_error">Error de Pago</string>
+    <string name="activity_pmz_pay_and_place_title">Procesando pago</string>
+    <string name="generic_error">Ha ocurrido un error inesperado.</string>
+
+    <!-- Menu -->
+    <string name="pmz_menu_chart_button">Ir al carrito</string>
+    <string name="pmz_menu_item_add_button">Agregar</string>
+    <string name="activity_pmz_product_button">Agregar al carrito</string>
+    <string name="pmz_product_quantity_title">Cantidad</string>
+    <string name="pmz_product_total_price_title">Total</string>
+
+    <!-- Cart -->
+    <string name="cart_your_order_title">Tu pedido</string>
+    <string name="cart_comment_hint">Agregar comentarios del pedido</string>
+    <string name="cart_total_price_title">Total</string>
+    <string name="cart_keep_buying_button">Seguir comprando</string>
+    <string name="swipe_to_delete_undo_button">DESHACER</string>
+    <string name="swipe_to_delete_favorite_warn">Borraste un item</string>
+    <string name="search_menu">Buscar</string>
+    <string name="cart_menu">Carrito</string>
+    <string name="search_hint">Buscar…</string>
+    <string name="no_items_on_cart">Tu carrito está vacío.</string>
+    <string name="cart_no_items_to_show">Tu carrito está vacío.</string>
+
+    <!-- Summary -->
+    <string name="activity_pmz_summary_title">Resumen de tu pedido</string>
+    <string name="summary_back_button">Continuar</string>
+    <string name="pmz_summary_first_explanation">Recibe tu pedido en el mostrador del comercio</string>
+    <string name="pmz_summary_second_explanation">Tu orden estará lista en aproximadamente 5 minutos</string>
+    <string name="summary_your_order_title">Resumen</string>
+    <string name="summary_total_price_title">Total</string>
+</resources>
