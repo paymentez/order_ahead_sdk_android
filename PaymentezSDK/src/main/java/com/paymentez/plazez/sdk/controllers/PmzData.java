@@ -69,6 +69,18 @@ class PmzData {
         context.startActivity(intent);
     }
 
+    public void reopenOrder(Context context, PmzOrder order, PmzBuyer buyer, String appOrderReference, PaymentezSDK.PmzSearchListener listener) {
+        this.searchListener = listener;
+        this.buyer = buyer;
+        this.order = order;
+        this.appOrderReference = appOrderReference;
+        Intent intent = new Intent(context, PmzCartActivity.class);
+        intent.putExtra(PmzCartActivity.FROM_REOPEN, true);
+        intent.putExtra(PmzCartActivity.PMZ_ORDER, order);
+        intent.putExtra(PmzCartActivity.PMZ_STORE, order.getStore());
+        context.startActivity(intent);
+    }
+
     public void showSummary(Context context, String appOrderReference, PmzOrder order, PaymentezSDK.PmzSearchListener listener) {
         this.searchListener = listener;
         this.appOrderReference = appOrderReference;

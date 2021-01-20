@@ -54,6 +54,13 @@ public class QuantitySelector extends LinearLayout {
         this.listener = listener;
     }
 
+    public void setQuantity(int quantity) {
+        if(quantity > 0) {
+            counter = quantity;
+            setCount();
+        }
+    }
+
     private void setViews() {
         counter = 1;
         count = findViewById(R.id.count);
@@ -100,4 +107,5 @@ public class QuantitySelector extends LinearLayout {
     private void setCount() {
         count.setText(String.valueOf(counter));
     }
+
 }

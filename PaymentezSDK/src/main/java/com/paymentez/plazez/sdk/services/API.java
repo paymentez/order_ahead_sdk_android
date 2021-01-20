@@ -75,11 +75,11 @@ public class API {
         }).execute();
     }
 
-    public static void addItemWithConfigurations(final PmzItem orderId, final ServiceCallback<PmzOrder> callback) {
+    public static void addItemWithConfigurations(final PmzItem item, final ServiceCallback<PmzOrder> callback) {
         new BaseTask<>(callback, new BaseTask.IServiceCaller<PmzOrder>() {
             @Override
             public PmzOrder callService() throws PmzException {
-                return Services.addItemWithConfig(orderId);
+                return Services.addItemWithConfig(item);
             }
         }).execute();
     }

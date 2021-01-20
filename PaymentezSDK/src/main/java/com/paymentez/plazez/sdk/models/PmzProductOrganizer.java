@@ -79,4 +79,29 @@ public class PmzProductOrganizer {
         }
         return configs;
     }
+
+    public void setItem(PmzItem item) {
+        if(item != null && item.getConfigurations() != null) {
+            for(PmzConfiguration config: item.getConfigurations()) {
+                PmzProductConfiguration productConfig = getProductConfigById(config.getConfigurationId());
+                productConfig.setChecked(true);
+            }
+        }
+    }
+
+    private PmzProductConfiguration getProductConfigById(Long id) {
+        PmzProductConfiguration result = null;
+        if(groups != null && id != null) {
+            for (PmzProductConfigurationGroup group : groups) {
+                if(group != null && group.getConfigurations() != null && group.getConfigurations().getConfigurations() != null) {
+                    for(PmzProductConfiguration config: group.getConfigurations().getConfigurations()) {
+                        if(config != null && config.getId() != null && config.getId().equals(id)) {
+                            result = config;
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
 }

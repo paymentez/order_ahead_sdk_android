@@ -28,6 +28,7 @@
     <string name="activity_pmz_product_button">Agregar al carrito</string>
     <string name="pmz_product_quantity_title">Cantidad</string>
     <string name="pmz_product_total_price_title">Total</string>
+    <string name="pmz_product_edit_button">Modificar</string>
 
     <!-- Cart -->
     <string name="cart_your_order_title">Tu pedido</string>

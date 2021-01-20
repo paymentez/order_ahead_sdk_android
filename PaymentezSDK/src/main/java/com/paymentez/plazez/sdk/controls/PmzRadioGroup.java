@@ -19,6 +19,7 @@ public class PmzRadioGroup extends LinearLayout {
 
     private List<PmzRadioItem> items;
     private List<Integer> selections;
+    private boolean editing = false;
 
     public interface IExtrasChangedListener {
         void onExtrasChanged();
@@ -48,9 +49,10 @@ public class PmzRadioGroup extends LinearLayout {
         setOrientation(VERTICAL);
     }
 
-    public void setItem(PmzConfigurationHolder item, IExtrasChangedListener listener) {
+    public void setItem(boolean editing, PmzConfigurationHolder item, IExtrasChangedListener listener) {
         this.item = item;
         this.listener = listener;
+        this.editing = editing;
         analiseItems();
         recreateData();
     }
@@ -85,7 +87,12 @@ public class PmzRadioGroup extends LinearLayout {
                         changeValuesFrom();
                     }
                 });
-                if(defaultSelection == i) {
+                if(editing) {
+                    if(config.isChecked()) {
+                        radioItem.setValue(true);
+                        selections.add(i);
+                    }
+                } else if(defaultSelection == i) {
                     radioItem.setValue(true);
                     selections.add(i);
                 }

@@ -44,6 +44,7 @@ public class PmzMenuActivity extends PmzBaseActivity {
 
     private PmzStore store;
     private boolean forcedId = false;
+    private boolean fromReopen = false;
     private MenuPagerAdapter adapter;
     private TabLayout tabLayout;
     private PmzOrder order;
@@ -66,7 +67,19 @@ public class PmzMenuActivity extends PmzBaseActivity {
 
     private void handleIntent() {
         if(getIntent() != null) {
-            if(getIntent().getBooleanExtra(FORCED_ID, false)) {
+            if (getIntent().getBooleanExtra(PmzCartActivity.FROM_REOPEN, false)) {
+                fromReopen = true;
+                store = getIntent().getParcelableExtra(PMZ_STORE);
+                if(store != null && store.getId() != null) {
+                    storeId = store.getId();
+                }
+                order = getIntent().getParcelableExtra(PMZ_ORDER);
+                setStoreData();
+                getData(true);
+                if (order != null && order.getItems() != null && order.getItems().size() > 0) {
+                    enableCartButton();
+                }
+            } else if(getIntent().getBooleanExtra(FORCED_ID, false)) {
                 storeId = getIntent().getLongExtra(PMZ_STORE, 0L);
                 forcedId = getIntent().getBooleanExtra(FORCED_ID, false);
                 getToken();
@@ -188,7 +201,11 @@ public class PmzMenuActivity extends PmzBaseActivity {
             @Override
             public void onSuccess(PmzMenu response) {
                 setDataIntoViews(response);
-                startOrder();
+                if(!fromReopen) {
+                    startOrder();
+                } else {
+                    hideLoading();
+                }
             }
 
             @Override
@@ -359,12 +376,13 @@ public class PmzMenuActivity extends PmzBaseActivity {
                     disableCartButton();
                 }
             } else {
-                if (forcedId) {
+                if (forcedId || fromReopen) {
                     PmzData.getInstance().onSearchSuccess();
                 } else {
                     setResult(RESULT_OK);
                 }
                 finish();
+                animActivityRightToLeft();
             }
         }
     }
@@ -391,7 +409,7 @@ public class PmzMenuActivity extends PmzBaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(forcedId) {
+        if(forcedId || fromReopen) {
             PmzData.getInstance().onSearchCancel();
         }
         animActivityLeftToRight();

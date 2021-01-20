@@ -80,6 +80,13 @@ public class PaymentezSDK {
         }
     }
 
+    public void reopenOrder(Context context, PmzOrder order, PmzBuyer buyer, String appOrderReference, PmzSearchListener listener) {
+        if(isInitialized() && isBuyerWellInitialized(buyer) && isAppOrderReferenceUsable(appOrderReference) && isOrderUsable(order)) {
+            checkContext(context);
+            PmzData.getInstance().reopenOrder(context, order, buyer, appOrderReference, listener);
+        }
+    }
+
     public void showSummary(Context context, String appOrderReference, PmzOrder order, PmzSearchListener listener) {
         if(isInitialized() && isAppOrderReferenceUsable(appOrderReference)) {
             checkContext(context);
@@ -151,6 +158,13 @@ public class PaymentezSDK {
         if(isInitialized()) {
             PmzData.getInstance().getStores(searchStoresFilter, listener);
         }
+    }
+
+    private boolean isOrderUsable(PmzOrder order) {
+        if(order != null && order.getId() != null && order.getStore() != null) {
+            return true;
+        }
+        throw new RuntimeException("PaymentezSDK: PmzOrder malformed");
     }
 
     private boolean isPaymentDataUsable(PmzPaymentData paymentData) {

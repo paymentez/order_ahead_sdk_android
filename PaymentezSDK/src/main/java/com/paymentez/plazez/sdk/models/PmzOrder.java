@@ -431,7 +431,7 @@ public class PmzOrder extends PmzModel implements Parcelable {
     }
 
     private static String json = "{\n" +
-            "  \"id\": 8493,\n" +
+            "  \"id\": 10561,\n" +
             "  \"status\": 0,\n" +
             "  \"tax\": 0,\n" +
             "  \"items\": [\n" +
@@ -495,7 +495,7 @@ public class PmzOrder extends PmzModel implements Parcelable {
             "  \"delivery_price\": 0,\n" +
             "  \"status_description\": null,\n" +
             "  \"store\": {\n" +
-            "    \"id\": 97,\n" +
+            "    \"id\": 105,\n" +
             "    \"name\": \"Spoleto Centro Chia\",\n" +
             "    \"address\": \"Avenida Pradilla 900 Este local 51\",\n" +
             "    \"lat\": 4.8471644,\n" +

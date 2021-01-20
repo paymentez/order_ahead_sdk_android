@@ -26,6 +26,7 @@ public class MainActivity extends BaseActivity {
 
     private View mainButton;
     private View withStoreIdButton;
+    private View reopenOrder;
     private View showSummaryButton;
     private View getStoresButton;
     private View multiPaymentButton;
@@ -44,6 +45,8 @@ public class MainActivity extends BaseActivity {
     private View textColorShower;
     private View buttonColorShower;
     private View buttonTextColorShower;
+
+    private PmzOrder orderInProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +85,10 @@ public class MainActivity extends BaseActivity {
                 PaymentezSDK.getInstance()
                         .setStyle(getStyles())
                         .startSearch(MainActivity.this, buyer, "appReference",  new PaymentezSDK.PmzSearchListener() {
+
                             @Override
                             public void onFinishedSuccessfully(PmzOrder order) {
+                                orderInProgress = order;
                                 Toast.makeText(MainActivity.this, getString(R.string.home_flow_success), Toast.LENGTH_LONG).show();
                             }
 
@@ -110,6 +115,38 @@ public class MainActivity extends BaseActivity {
                 PaymentezSDK.getInstance()
                         .setStyle(getStyles())
                         .startSearch(MainActivity.this, buyer, "appReference", 105L, new PaymentezSDK.PmzSearchListener() {
+                            @Override
+                            public void onFinishedSuccessfully(PmzOrder order) {
+                                Toast.makeText(MainActivity.this, getString(R.string.home_flow_success), Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onError(PmzError error) {
+                                if(error.getType().equals(PmzError.SESSION_EXPIRED)) {
+                                    Toast.makeText(MainActivity.this, R.string.main_payment_session_expired, Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(MainActivity.this, R.string.generic_error, Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancel() {
+                                Toast.makeText(MainActivity.this, getString(R.string.home_flow_cancelled), Toast.LENGTH_LONG).show();
+                            }
+                        });
+            }
+        });
+
+        reopenOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PmzOrder orderToSend = PmzOrder.hardcoded();
+                if(orderInProgress != null) {
+                    orderToSend = orderInProgress;
+                }
+                PaymentezSDK.getInstance()
+                        .setStyle(getStyles())
+                        .reopenOrder(MainActivity.this, orderToSend, buyer, "appReference",  new PaymentezSDK.PmzSearchListener() {
                             @Override
                             public void onFinishedSuccessfully(PmzOrder order) {
                                 Toast.makeText(MainActivity.this, getString(R.string.home_flow_success), Toast.LENGTH_LONG).show();
@@ -296,6 +333,7 @@ public class MainActivity extends BaseActivity {
     private void findViews() {
         mainButton = findViewById(R.id.button);
         withStoreIdButton = findViewById(R.id.button_with_store_id);
+        reopenOrder = findViewById(R.id.reopen_order);
         showSummaryButton = findViewById(R.id.show_summary_button);
         getStoresButton = findViewById(R.id.get_stores_button);
         multiPaymentButton = findViewById(R.id.multi_payment_button);

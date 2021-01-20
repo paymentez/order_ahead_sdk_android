@@ -67,6 +67,14 @@ public class PmzCartAdapter extends SwiperAdapter<PmzItem, PmzCartAdapter.PmzCar
                 }
             }
         });
+        holder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(listener != null) {
+                    listener.onEditItem(items.get(holder.getAdapterPosition()));
+                }
+            }
+        });
         setStyles(holder);
     }
 

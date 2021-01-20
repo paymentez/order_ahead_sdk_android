@@ -32,9 +32,12 @@ public class PmzCartActivity extends AbstractSwiperContainerActivity<PmzItem, Pm
 
     public static final String SHOW_CART = "show cart";
     public static final String ORDER_MODIFIED = "order modified";
+    public static final String FROM_REOPEN = "from reopen";
+    private static final int EDIT_ITEM = 3001;
 
     private boolean orderModified = false;
     private boolean justCart = false;
+    private boolean fromReopen = false;
 
     private PmzOrder order;
     private PmzStore store;
@@ -51,6 +54,9 @@ public class PmzCartActivity extends AbstractSwiperContainerActivity<PmzItem, Pm
         setFullTitleWithBack(getString(R.string.activity_pmz_cart_title));
         setViews();
         handleIntent();
+        if(fromReopen) {
+            getToken();
+        }
     }
 
     private void handleIntent() {
@@ -58,6 +64,7 @@ public class PmzCartActivity extends AbstractSwiperContainerActivity<PmzItem, Pm
             justCart = getIntent().getBooleanExtra(SHOW_CART, false);
             order = getIntent().getParcelableExtra(PMZ_ORDER);
             store = getIntent().getParcelableExtra(PMZ_STORE);
+            fromReopen = getIntent().getBooleanExtra(FROM_REOPEN, false);
 
             if(order == null) {
                 order = new PmzOrder();
@@ -136,21 +143,23 @@ public class PmzCartActivity extends AbstractSwiperContainerActivity<PmzItem, Pm
         adapter = new PmzCartAdapter(this, new PmzCartAdapter.IPmzCartAdapterListener() {
             @Override
             public void onItemRemoved(PmzItem item, int position) {
-                recalculatePrice();
                 deleteItem(item);
+                recalculatePrice();
             }
 
             @Override
             public void onItemRestored(PmzItem item) {
-                /*if(itemRemoved != null) {
-                    order.addItem(itemRemoved, positionRemoved);
-                }*/
                 recalculatePrice();
             }
 
             @Override
             public void onEditItem(PmzItem item) {
-
+                Intent intent = new Intent(PmzCartActivity.this, PmzProductActivity.class);
+                item.setOrderId(order.getId());
+                intent.putExtra(PmzProductActivity.PMZ_ITEM, item);
+                intent.putExtra(PMZ_STORE, store);
+                startActivityForResult(intent, EDIT_ITEM);
+                animActivityRightToLeft();
             }
         });
         recycler.setAdapter(adapter);
@@ -167,6 +176,7 @@ public class PmzCartActivity extends AbstractSwiperContainerActivity<PmzItem, Pm
                 orderModified = true;
                 response.mergeData(order);
                 PmzCartActivity.this.order = response;
+                recalculatePrice();
                 if(order.getItems() == null || order.getItems().size() == 0) {
                     DialogUtils.toast(PmzCartActivity.this, getString(R.string.cart_no_items_to_show));
                     onBackPressed();
@@ -218,7 +228,11 @@ public class PmzCartActivity extends AbstractSwiperContainerActivity<PmzItem, Pm
                     PaymentezSDK.getInstance().setOrderResult(order);
                     setResult(RESULT_OK);
                 }
+                if(fromReopen) {
+                    PmzData.getInstance().onSearchSuccess();
+                }
                 finish();
+                animActivityRightToLeft();
             }
         });
         findViewById(R.id.keep_buying).setOnClickListener(new View.OnClickListener() {
@@ -230,8 +244,20 @@ public class PmzCartActivity extends AbstractSwiperContainerActivity<PmzItem, Pm
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == EDIT_ITEM && resultCode == RESULT_OK && data != null && data.getParcelableExtra(PMZ_ORDER) != null) {
+            orderModified = true;
+            this.order = data.getParcelableExtra(PMZ_ORDER);
+            setDataIntoViews();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
-        if(justCart) {
+        if(fromReopen) {
+            goBackToMenuFromReopen();
+        } else if(justCart) {
             super.onBackPressed();
             PmzData.getInstance().onSearchCancel();
         } else if(orderModified) {
@@ -241,6 +267,15 @@ public class PmzCartActivity extends AbstractSwiperContainerActivity<PmzItem, Pm
             super.onBackPressed();
         }
         animActivityLeftToRight();
+    }
+
+    private void goBackToMenuFromReopen() {
+        Intent intent = new Intent(this, PmzMenuActivity.class);
+        intent.putExtra(PMZ_ORDER, order);
+        intent.putExtra(PMZ_STORE, store);
+        intent.putExtra(FROM_REOPEN, true);
+        startActivity(intent);
+        finish();
     }
 
     private void sendBackOrder() {
@@ -268,5 +303,39 @@ public class PmzCartActivity extends AbstractSwiperContainerActivity<PmzItem, Pm
     @Override
     protected List<PmzItem> getItems() {
         return order.getItems();
+    }
+
+    private void getToken() {
+        showLoading();
+        API.getSession(PmzData.getInstance().getSession(), new API.ServiceCallback<String>() {
+            @Override
+            public void onSuccess(String response) {
+                hideLoading();
+                PmzData.getInstance().setToken(response);
+            }
+
+            @Override
+            public void onError(PmzErrorMessage error) {
+                hideLoading();
+                DialogUtils.toast(PmzCartActivity.this, error.getErrorMessage());
+                finish();
+                animActivityLeftToRight();
+            }
+
+            @Override
+            public void onFailure() {
+                hideLoading();
+                DialogUtils.genericError(PmzCartActivity.this);
+                finish();
+                animActivityLeftToRight();
+            }
+
+            @Override
+            public void sessionExpired() {
+                hideLoading();
+                onSessionExpired();
+                PmzData.getInstance().onSearchSessionExpired();
+            }
+        });
     }
 }

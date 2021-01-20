@@ -148,6 +148,7 @@ public class PmzStoresActivity extends PmzBaseActivity {
             finish();
         } else if(requestCode == MAIN_FLOW_KEY && resultCode == RESULT_OK) {
             PmzData.getInstance().onSearchSuccess();
+            animActivityRightToLeft();
             finish();
         }
     }
