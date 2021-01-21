@@ -364,6 +364,22 @@
                     android:textSize="20dp" />
 
                 <TextView
+                    android:id="@+id/reopen_order"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/main_button_background"
+                    android:gravity="center"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/main_reopen_order_button"
+                    android:textAllCaps="true"
+                    android:textColor="@android:color/white"
+                    android:textSize="20dp" />
+
+                <TextView
                     android:id="@+id/show_summary_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

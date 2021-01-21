@@ -12,6 +12,7 @@ import com.paymentez.plazez.sdk.controllers.PmzBaseActivity;
 import com.paymentez.plazez.sdk.controls.PmzRadioGroup;
 import com.paymentez.plazez.sdk.models.PmzConfigurationHolder;
 import com.paymentez.plazez.sdk.models.PmzIProductDisplay;
+import com.paymentez.plazez.sdk.models.PmzItem;
 import com.paymentez.plazez.sdk.models.PmzProduct;
 import com.paymentez.plazez.sdk.models.PmzProductOrganizer;
 import com.paymentez.plazez.sdk.models.PmzTitleItem;
@@ -21,6 +22,7 @@ public class PmzProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private final PmzBaseActivity activity;
     private final IExtrasListener listener;
     private PmzProductOrganizer organizer;
+    private boolean editing = false;
 
     public PmzProductOrganizer getOrganizer() {
         return organizer;
@@ -61,7 +63,7 @@ public class PmzProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if(viewType == PmzIProductDisplay.ITEM) {
             PmzProductHolder holder = (PmzProductHolder) genericHolder;
             PmzConfigurationHolder item = (PmzConfigurationHolder) organizer.getItem(position);
-            holder.radio.setItem(item, new PmzRadioGroup.IExtrasChangedListener() {
+            holder.radio.setItem(editing, item, new PmzRadioGroup.IExtrasChangedListener() {
                 @Override
                 public void onExtrasChanged() {
                     listener.onExtrasUpdated(organizer.measureExtras());
@@ -83,7 +85,17 @@ public class PmzProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.organizer.setProduct(product);
     }
 
+    public void setProductForEdit(PmzProduct product, PmzItem item) {
+        editing = true;
+        this.organizer.setProduct(product);
+        this.organizer.setItem(item);
+        notifyDataSetChanged();
+    }
+
     public Long getExtras() {
+        if(organizer != null) {
+            return organizer.measureExtras();
+        }
         return 0L;
     }
 
