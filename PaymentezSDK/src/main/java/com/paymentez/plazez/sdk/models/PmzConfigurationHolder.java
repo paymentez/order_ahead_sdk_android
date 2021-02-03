@@ -24,7 +24,11 @@ public class PmzConfigurationHolder implements PmzIProductDisplay{
     }
 
     public int size() {
-        return configurations.size();
+        if(configurations != null) {
+            return configurations.size();
+        } else {
+            return 0;
+        }
     }
 
     @Override

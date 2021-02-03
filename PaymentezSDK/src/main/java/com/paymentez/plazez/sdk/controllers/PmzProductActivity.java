@@ -139,6 +139,7 @@ public class PmzProductActivity extends PmzBaseActivity {
             refreshPrice(quantitySelector.getCounter());
         } else {
             adapter.setProduct(product);
+            refreshPrice(quantitySelector.getCounter());
         }
     }
 
@@ -289,6 +290,9 @@ public class PmzProductActivity extends PmzBaseActivity {
                 hideLoading();
                 if(product != null) {
                     setDataIntoViews();
+                } else {
+                    DialogUtils.genericError(PmzProductActivity.this);
+                    onBackPressed();
                 }
             }
 

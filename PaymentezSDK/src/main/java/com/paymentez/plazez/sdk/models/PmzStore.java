@@ -26,7 +26,7 @@ public class PmzStore implements Parcelable {
     private Boolean enablePayAtTheTableOrders;
     private Integer type;
     private String commerceImage;
-    private Integer commerceFiscalNumber;
+    private String commerceFiscalNumber;
     private Long subsidiaryId;
     private String zipCode;
     private String companyName;
@@ -109,7 +109,7 @@ public class PmzStore implements Parcelable {
                     store.setCommerceId(json.getLong("commerce_id"));
                 }
                 if(json.has("commerce_fiscal_number") && !json.isNull("commerce_fiscal_number")) {
-                    store.setCommerceFiscalNumber(json.getInt("commerce_fiscal_number"));
+                    store.setCommerceFiscalNumber(json.getString("commerce_fiscal_number"));
                 }
                 if(json.has("subsidiary_id") && !json.isNull("subsidiary_id")) {
                     store.setSubsidiaryId(json.getLong("subsidiary_id"));
@@ -286,11 +286,11 @@ public class PmzStore implements Parcelable {
         this.commerceImage = commerceImage;
     }
 
-    public Integer getCommerceFiscalNumber() {
+    public String getCommerceFiscalNumber() {
         return commerceFiscalNumber;
     }
 
-    public void setCommerceFiscalNumber(Integer commerceFiscalNumber) {
+    public void setCommerceFiscalNumber(String commerceFiscalNumber) {
         this.commerceFiscalNumber = commerceFiscalNumber;
     }
 
@@ -462,7 +462,7 @@ public class PmzStore implements Parcelable {
         dest.writeValue(this.enablePayAtTheTableOrders);
         dest.writeValue(this.type);
         dest.writeString(this.commerceImage);
-        dest.writeValue(this.commerceFiscalNumber);
+        dest.writeString(this.commerceFiscalNumber);
         dest.writeValue(this.subsidiaryId);
         dest.writeString(this.zipCode);
         dest.writeString(this.companyName);
@@ -498,7 +498,7 @@ public class PmzStore implements Parcelable {
         this.enablePayAtTheTableOrders = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.type = (Integer) in.readValue(Integer.class.getClassLoader());
         this.commerceImage = in.readString();
-        this.commerceFiscalNumber = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.commerceFiscalNumber = in.readString();
         this.subsidiaryId = (Long) in.readValue(Long.class.getClassLoader());
         this.zipCode = in.readString();
         this.companyName = in.readString();

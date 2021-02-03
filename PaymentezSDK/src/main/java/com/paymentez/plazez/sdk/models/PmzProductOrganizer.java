@@ -19,6 +19,34 @@ public class PmzProductOrganizer {
                     newGroup.addConfig(config);
                 }
             }
+            if(groups != null) {
+                for(PmzProductConfigurationGroup group: groups) {
+                    setDefaults(group);
+                }
+            }
+        }
+    }
+
+    private void setDefaults(PmzProductConfigurationGroup group) {
+        int defaultSelection = -1;
+        int minSelection = 0;
+        if(group != null && group.getConfigurations() != null) {
+            for(int i = 0; i < group.getConfigurations().size(); i++) {
+                PmzProductConfiguration config = group.getConfigurations().getConfigurations().get(i);
+                minSelection = config.getMinConfiguration();
+                if(config.getDefaultValue()) {
+                    defaultSelection = i;
+                    config.setChecked(true);
+                }
+            }
+            if(minSelection > 0 && defaultSelection == -1) {
+                defaultSelection = 0;
+                if(group.getConfigurations().size() > 0) {
+                    PmzProductConfiguration pmzProductConfiguration = group.getConfigurations().getConfigurations().get(defaultSelection);
+                    pmzProductConfiguration.setDefault(true);
+                    pmzProductConfiguration.setChecked(true);
+                }
+            }
         }
     }
 
