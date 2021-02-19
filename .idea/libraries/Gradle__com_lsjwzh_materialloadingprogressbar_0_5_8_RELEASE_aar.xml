@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="Gradle: com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE@aar">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/cef38d9ec58ff11e6a38308c6cdff817/jetified-materialloadingprogressbar-0.5.8-RELEASE/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/99ce9e18e225775cc3550d3645bd85a0/jetified-materialloadingprogressbar-0.5.8-RELEASE/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/cef38d9ec58ff11e6a38308c6cdff817/jetified-materialloadingprogressbar-0.5.8-RELEASE/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/cef38d9ec58ff11e6a38308c6cdff817/jetified-materialloadingprogressbar-0.5.8-RELEASE/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/99ce9e18e225775cc3550d3645bd85a0/jetified-materialloadingprogressbar-0.5.8-RELEASE/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/99ce9e18e225775cc3550d3645bd85a0/jetified-materialloadingprogressbar-0.5.8-RELEASE/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
