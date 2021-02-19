@@ -22,7 +22,6 @@ public class PmzProduct implements Parcelable {
     private String appDisplayName;
     private Long displayOrder;
     private String coverImageUrl;
-    private Boolean storeDisabled;
     private List<PmzProductConfiguration> configurations;
 
     public static List<PmzProduct> fromJSONArray(JSONArray json) {
@@ -69,9 +68,6 @@ public class PmzProduct implements Parcelable {
                 }
                 if(json.has("display_order")) {
                     product.setDisplayOrder(json.getLong("display_order"));
-                }
-                if(json.has("store_disabled") && !json.isNull("store_disabled")) {
-                    product.setStoreDisabled(json.getBoolean("store_disabled"));
                 }
                 if(json.has("configurations")) {
                     product.setConfigurations(PmzProductConfiguration.fromJSONArray(json.getJSONArray("configurations")));
@@ -163,20 +159,15 @@ public class PmzProduct implements Parcelable {
         this.coverImageUrl = coverImageUrl;
     }
 
-    public Boolean getStoreDisabled() {
-        return storeDisabled;
-    }
-
-    public void setStoreDisabled(Boolean storeDisabled) {
-        this.storeDisabled = storeDisabled;
-    }
-
     public Long getCurrentPrice() {
         return currentPrice;
     }
 
     public void setCurrentPrice(Long currentPrice) {
         this.currentPrice = currentPrice;
+    }
+
+    public PmzProduct() {
     }
 
     @Override
@@ -191,16 +182,12 @@ public class PmzProduct implements Parcelable {
         dest.writeString(this.description);
         dest.writeString(this.imageUrl);
         dest.writeValue(this.status);
-        dest.writeTypedList(this.configurations);
         dest.writeValue(this.listPrice);
         dest.writeValue(this.currentPrice);
         dest.writeString(this.appDisplayName);
         dest.writeValue(this.displayOrder);
         dest.writeString(this.coverImageUrl);
-        dest.writeValue(this.storeDisabled);
-    }
-
-    public PmzProduct() {
+        dest.writeTypedList(this.configurations);
     }
 
     protected PmzProduct(Parcel in) {
@@ -209,13 +196,12 @@ public class PmzProduct implements Parcelable {
         this.description = in.readString();
         this.imageUrl = in.readString();
         this.status = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.configurations = in.createTypedArrayList(PmzProductConfiguration.CREATOR);
         this.listPrice = (Long) in.readValue(Long.class.getClassLoader());
         this.currentPrice = (Long) in.readValue(Long.class.getClassLoader());
         this.appDisplayName = in.readString();
         this.displayOrder = (Long) in.readValue(Long.class.getClassLoader());
         this.coverImageUrl = in.readString();
-        this.storeDisabled = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.configurations = in.createTypedArrayList(PmzProductConfiguration.CREATOR);
     }
 
     public static final Creator<PmzProduct> CREATOR = new Creator<PmzProduct>() {
