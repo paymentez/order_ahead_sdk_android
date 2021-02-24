@@ -39,6 +39,7 @@ public class PmzProductActivity extends PmzBaseActivity {
     private Long orderId;
     private PmzItem item;
     private PmzOrder order;
+    private Long storeId;
 
     private ImageView image;
     private TextView title;
@@ -118,6 +119,7 @@ public class PmzProductActivity extends PmzBaseActivity {
             }
         } else if(getIntent() != null && getIntent().getParcelableExtra(PRODUCT_KEY) != null) {
             orderId = getIntent().getLongExtra(PMZ_ORDER_ID, 0L);
+            storeId = getIntent().getLongExtra(PMZ_STORE, 0L);
             product = getIntent().getParcelableExtra(PRODUCT_KEY);
             order = getIntent().getParcelableExtra(PMZ_ORDER);
             setDataIntoViews();
@@ -179,7 +181,11 @@ public class PmzProductActivity extends PmzBaseActivity {
                 if(itemEdit) {
                     deleteItemWConfigurations();
                 } else {
-                    addItemWConfigurations();
+                    if(order == null) {
+                        startOrder();
+                    } else {
+                        addItemWConfigurations();
+                    }
                 }
             }
         });
@@ -216,6 +222,42 @@ public class PmzProductActivity extends PmzBaseActivity {
                 PmzData.getInstance().onSearchSessionExpired();
             }
         });
+    }
+
+    private void startOrder() {
+        if(storeId != 0) {
+            PmzOrder pmzOrder = PmzOrder.buildForOrderStart(PmzData.getInstance().getBuyer(), PmzData.getInstance().getAppOrderReference(),
+                    storeId);
+            API.startOrder(pmzOrder, new API.ServiceCallback<PmzOrder>() {
+                @Override
+                public void onSuccess(PmzOrder response) {
+                    order = response;
+                    item.setOrderId(order.getId());
+                    addItemWConfigurations();
+                }
+
+                @Override
+                public void onError(PmzErrorMessage error) {
+                    hideLoading();
+                    DialogUtils.toast(PmzProductActivity.this, error.getErrorMessage());
+                }
+
+                @Override
+                public void onFailure() {
+                    hideLoading();
+                    DialogUtils.genericError(PmzProductActivity.this);
+                }
+
+                @Override
+                public void sessionExpired() {
+                    hideLoading();
+                    onSessionExpired();
+                    PmzData.getInstance().onSearchSessionExpired();
+                }
+            });
+        } else {
+            DialogUtils.genericError(PmzProductActivity.this);
+        }
     }
 
     private void addItemWConfigurations() {

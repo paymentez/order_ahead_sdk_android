@@ -194,49 +194,14 @@ public class PmzMenuActivity extends PmzBaseActivity {
     }
 
     private void getData(boolean showLoading) {
-        if(showLoading) {
+        if (showLoading) {
             showLoading();
         }
         API.getMenu(storeId, new API.ServiceCallback<PmzMenu>() {
             @Override
             public void onSuccess(PmzMenu response) {
                 setDataIntoViews(response);
-                if(!fromReopen) {
-                    startOrder();
-                } else {
-                    hideLoading();
-                }
-            }
-
-            @Override
-            public void onError(PmzErrorMessage error) {
                 hideLoading();
-                DialogUtils.toast(PmzMenuActivity.this, error.getErrorMessage());
-            }
-
-            @Override
-            public void onFailure() {
-                hideLoading();
-                DialogUtils.genericError(PmzMenuActivity.this);
-            }
-
-            @Override
-            public void sessionExpired() {
-                hideLoading();
-                onSessionExpired();
-                PmzData.getInstance().onSearchSessionExpired();
-            }
-        });
-    }
-
-    private void startOrder() {
-        PmzOrder pmzOrder = PmzOrder.buildForOrderStart(PmzData.getInstance().getBuyer(), PmzData.getInstance().getAppOrderReference(),
-                storeId);
-        API.startOrder(pmzOrder, new API.ServiceCallback<PmzOrder>() {
-            @Override
-            public void onSuccess(PmzOrder response) {
-                hideLoading();
-                order = response;
             }
 
             @Override
@@ -418,9 +383,12 @@ public class PmzMenuActivity extends PmzBaseActivity {
     public void addProduct(PmzProduct product) {
         Intent intent = new Intent(this, PmzProductActivity.class);
         intent.putExtra(PmzProductActivity.PRODUCT_KEY, product);
-        intent.putExtra(PMZ_ORDER_ID, order.getId());
+        if(store != null) {
+            intent.putExtra(PMZ_STORE, store.getId());
+        }
         if(order != null) {
             intent.putExtra(PMZ_ORDER, order);
+            intent.putExtra(PMZ_ORDER_ID, order.getId());
         }
         startActivityForResult(intent, ADD_PRODUCT_REQUEST);
         animActivityRightToLeft();
