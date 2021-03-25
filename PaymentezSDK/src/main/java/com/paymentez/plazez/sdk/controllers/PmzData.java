@@ -19,6 +19,9 @@ import com.paymentez.plazez.sdk.styles.PmzStyle;
 
 class PmzData {
 
+    private static final String STG_BASE_URL = "https://middleware-stg.paymentez.com/";
+    private static final String PROD_BASE_URL = "http://middleware.paymentez.com/";
+
     private static PmzData instance;
     private PmzSession session;
 
@@ -32,6 +35,7 @@ class PmzData {
     private String token;
     private PmzBuyer buyer;
     private String appOrderReference;
+    private boolean production = false;
 
     public static PmzData getInstance() {
         if(instance == null) {
@@ -232,5 +236,20 @@ class PmzData {
         if(paymentChecker != null) {
             paymentChecker.onError(order, new PmzError(PmzError.SESSION_EXPIRED));
         }
+    }
+
+    public String getBaseUrl() {
+        if(production) {
+            return PROD_BASE_URL;
+        }
+        return STG_BASE_URL;
+    }
+
+    public void setProduction(boolean isProd) {
+        this.production = isProd;
+    }
+
+    public boolean isProduction() {
+        return production;
     }
 }
