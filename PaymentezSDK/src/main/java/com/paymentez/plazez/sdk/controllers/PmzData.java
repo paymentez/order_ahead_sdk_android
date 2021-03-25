@@ -20,7 +20,7 @@ import com.paymentez.plazez.sdk.styles.PmzStyle;
 class PmzData {
 
     private static final String STG_BASE_URL = "https://middleware-stg.paymentez.com/";
-    private static final String PROD_BASE_URL = "http://middleware.paymentez.com/";
+    private static final String PROD_BASE_URL = "https://middleware.paymentez.com/";
 
     private static PmzData instance;
     private PmzSession session;
