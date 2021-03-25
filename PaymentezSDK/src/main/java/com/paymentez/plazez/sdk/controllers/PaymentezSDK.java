@@ -23,6 +23,13 @@ public class PaymentezSDK {
         instance.setSession(new PmzSession(appCode, appKey));
     }
 
+    public static void initialize(String appCode, String appKey, boolean isProd) {
+        getInstance();
+        PmzData instance = PmzData.getInstance();
+        instance.setProduction(isProd);
+        instance.setSession(new PmzSession(appCode, appKey));
+    }
+
     public String getToken() {
         return PmzData.getInstance().getToken();
     }

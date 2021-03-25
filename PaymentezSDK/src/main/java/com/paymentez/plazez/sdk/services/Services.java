@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import com.paymentez.plazez.sdk.controllers.PaymentezSDK;
+import com.paymentez.plazez.sdk.controllers.UrlHolder;
 import com.paymentez.plazez.sdk.exceptions.PmzException;
 import com.paymentez.plazez.sdk.models.PmzCapacity;
 import com.paymentez.plazez.sdk.models.PmzMenu;
@@ -39,8 +40,6 @@ public class Services {
     private static final int SUCCESS_CODE = 200;
     private static final String MESSAGE_OK = "OK";
     private static final String STATUS_OK = "00";
-
-    private static final String BASE_URL = "https://middleware-stg.paymentez.com/";
 
     //GETs
     private static final String GET_STORES = "store/list";
@@ -449,7 +448,7 @@ public class Services {
 
     @NonNull
     private static HttpURLConnection getHttpURLConnection(String method) throws IOException {
-        URL url = new URL(BASE_URL + method);
+        URL url = new URL(new UrlHolder().getBaseUrl() + method);
         return (HttpURLConnection) url.openConnection();
     }
 
