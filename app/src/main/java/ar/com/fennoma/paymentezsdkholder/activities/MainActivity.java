@@ -114,7 +114,7 @@ public class MainActivity extends BaseActivity {
             public void onClick(View view) {
                 PaymentezSDK.getInstance()
                         .setStyle(getStyles())
-                        .startSearch(MainActivity.this, buyer, "appReference", 105L, new PaymentezSDK.PmzSearchListener() {
+                        .startSearch(MainActivity.this, buyer, "appReference", 2L, new PaymentezSDK.PmzSearchListener() {
                             @Override
                             public void onFinishedSuccessfully(PmzOrder order) {
                                 Toast.makeText(MainActivity.this, getString(R.string.home_flow_success), Toast.LENGTH_LONG).show();
