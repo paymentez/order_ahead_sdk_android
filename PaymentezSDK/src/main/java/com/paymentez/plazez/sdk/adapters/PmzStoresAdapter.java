@@ -11,12 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 
 import com.paymentez.plazez.sdk.R;
 import com.paymentez.plazez.sdk.controllers.PaymentezSDK;
 import com.paymentez.plazez.sdk.models.PmzStore;
+import com.paymentez.plazez.sdk.utils.GpsManager;
 import com.paymentez.plazez.sdk.utils.ImageUtils;
+import com.paymentez.plazez.sdk.utils.PmzCurrencyUtils;
 
 public class PmzStoresAdapter extends RecyclerView.Adapter<PmzStoresAdapter.PmzStoreHolder> {
 
@@ -61,6 +64,13 @@ public class PmzStoresAdapter extends RecyclerView.Adapter<PmzStoresAdapter.PmzS
                 listener.onStoreClicked(stores.get(holder.getAdapterPosition()));
             }
         });
+
+        Float distanceKm = GpsManager.getInstance().getDistanceFromCurrent(store);
+        if(distanceKm != null) {
+            holder.distance.setText(PmzCurrencyUtils.formatDistance(distanceKm).concat(" km"));
+        } else {
+            holder.distance.setText("-");
+        }
     }
 
     public void setFilter(String s) {

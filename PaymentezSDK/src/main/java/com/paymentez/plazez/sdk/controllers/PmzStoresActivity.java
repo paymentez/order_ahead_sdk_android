@@ -22,6 +22,7 @@ import com.paymentez.plazez.sdk.models.PmzErrorMessage;
 import com.paymentez.plazez.sdk.models.PmzStore;
 import com.paymentez.plazez.sdk.services.API;
 import com.paymentez.plazez.sdk.utils.DialogUtils;
+import com.paymentez.plazez.sdk.utils.GpsManager;
 
 public class PmzStoresActivity extends PmzBaseActivity {
 
@@ -40,7 +41,26 @@ public class PmzStoresActivity extends PmzBaseActivity {
         setFullTitleWithBack(getString(R.string.activity_pmz_stores_title));
         setViews();
         handleIntent();
+        checkForPermissions();
     }
+
+    private void checkForPermissions() {
+        checkLocationPermission(new IPermissionsListener() {
+            @Override
+            public void onPermissionAccepted() {
+                GpsManager.getInstance().startUp(PmzStoresActivity.this);
+                if(GpsManager.getInstance().getLocation() != null && adapter != null) {
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onPermissionDenied() {
+
+            }
+        });
+    }
+
 
     private void handleIntent() {
         if(getIntent() != null) {

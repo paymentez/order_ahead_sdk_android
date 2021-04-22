@@ -3,6 +3,8 @@ package com.paymentez.plazez.sdk.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -431,6 +433,14 @@ public class PmzStore implements Parcelable {
     }
 
     public PmzStore() {
+    }
+
+    public LatLng getLatLng() {
+        if(getLatitude() != null && getLongitude() != null) {
+            return new LatLng(getLatitude(), getLongitude());
+        } else {
+            return null;
+        }
     }
 
     public PmzSponsor getSponsor() {

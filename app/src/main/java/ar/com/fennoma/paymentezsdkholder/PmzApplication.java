@@ -9,6 +9,6 @@ public class PmzApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        PaymentezSDK.initialize("PMTZ-SDK-LM-CO-SERVER", "S72CVybhzWRTMFJHnyLLMJS0cXXRpQ4", true);
+        PaymentezSDK.initialize("PMTZ-SDK-LM-CO-SERVER", "S72CVybhzWRTMFJHnyLLMJS0cXXRpQ4", false);
     }
 }

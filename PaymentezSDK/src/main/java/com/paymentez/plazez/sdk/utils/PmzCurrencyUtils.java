@@ -24,4 +24,9 @@ public class PmzCurrencyUtils {
         return "$ ".concat(new DecimalFormat("#,###,##0", symbols).format(value));
     }
 
+    public static String formatDistance(float distance){
+        DecimalFormat df = new DecimalFormat("0.0");
+        return df.format(distance).replace(".", ",");
+    }
+
 }

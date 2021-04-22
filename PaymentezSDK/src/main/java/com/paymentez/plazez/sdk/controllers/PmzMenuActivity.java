@@ -35,7 +35,9 @@ import com.paymentez.plazez.sdk.models.PmzStore;
 import com.paymentez.plazez.sdk.services.API;
 import com.paymentez.plazez.sdk.utils.ColorHelper;
 import com.paymentez.plazez.sdk.utils.DialogUtils;
+import com.paymentez.plazez.sdk.utils.GpsManager;
 import com.paymentez.plazez.sdk.utils.ImageUtils;
+import com.paymentez.plazez.sdk.utils.PmzCurrencyUtils;
 
 public class PmzMenuActivity extends PmzBaseActivity {
 
@@ -63,6 +65,24 @@ public class PmzMenuActivity extends PmzBaseActivity {
         setFullTitleWithBack(getString(R.string.activity_pmz_menu_title));
         setViews();
         handleIntent();
+        checkForPermissions();
+    }
+
+    private void checkForPermissions() {
+        checkLocationPermission(new IPermissionsListener() {
+            @Override
+            public void onPermissionAccepted() {
+                GpsManager.getInstance().startUp(PmzMenuActivity.this);
+                if(GpsManager.getInstance().getLocation() != null && store != null) {
+                    setStoreData();
+                }
+            }
+
+            @Override
+            public void onPermissionDenied() {
+
+            }
+        });
     }
 
     private void handleIntent() {
@@ -105,7 +125,6 @@ public class PmzMenuActivity extends PmzBaseActivity {
         ImageView icon = findViewById(R.id.icon);
         TextView title = findViewById(R.id.title);
         TextView description = findViewById(R.id.description);
-        TextView distance = findViewById(R.id.distance);
 
         ImageUtils.loadStoreImage(this, image, store.getImageUrl());
         ImageUtils.loadStoreImage(this, icon, store.getImageUrl());
@@ -116,6 +135,19 @@ public class PmzMenuActivity extends PmzBaseActivity {
         if(PaymentezSDK.getInstance().getStyle().getTextColor() != null) {
             title.setTextColor(PaymentezSDK.getInstance().getStyle().getTextColor());
             description.setTextColor(PaymentezSDK.getInstance().getStyle().getTextColor());
+        }
+        checkForDistance();
+    }
+
+    private void checkForDistance() {
+        if(store != null) {
+            TextView distance = findViewById(R.id.distance);
+            Float distanceKm = GpsManager.getInstance().getDistanceFromCurrent(store);
+            if (distanceKm != null) {
+                distance.setText(PmzCurrencyUtils.formatDistance(distanceKm).concat(" km"));
+            } else {
+                distance.setText("-");
+            }
         }
     }
 

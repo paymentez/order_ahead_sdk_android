@@ -1,7 +1,10 @@
 package com.paymentez.plazez.sdk.controllers;
 
+import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -9,23 +12,36 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 
 import com.paymentez.plazez.sdk.R;
 import com.paymentez.plazez.sdk.styles.PmzFont;
 import com.paymentez.plazez.sdk.utils.TypefaceUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PmzBaseActivity extends AppCompatActivity {
 
     protected static final int MAIN_FLOW_KEY = 1001;
+    protected static final int LOCATION_PERMISSION_REQUEST = 113;
     public static final String SESSION_EXPIRED_KEY = "session expired key";
     public static final String PMZ_STORE = "store Id";
     public static final String PMZ_ORDER_ID = "order id key";
     public static final String PMZ_ORDER = "order key";
     private Toolbar toolbar;
     private Dialog loadingDialog;
+
+    protected interface IPermissionsListener {
+        void onPermissionAccepted();
+        void onPermissionDenied();
+    }
+
+    private IPermissionsListener permissionsListener;
 
     protected void setFont() {
         PmzFont font = PmzData.getInstance().getStyle().getFont();
@@ -141,5 +157,87 @@ public class PmzBaseActivity extends AppCompatActivity {
 
     private boolean isActivityAlive() {
         return !isFinishing();
+    }
+
+    private boolean requestLocationPermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            String[] PERMISSIONS = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+            if (!hasPermissions(getApplicationContext(), PERMISSIONS)) {
+                ActivityCompat.requestPermissions(this, PERMISSIONS, LOCATION_PERMISSION_REQUEST);
+                return false;
+            } else {
+                if(permissionsListener != null) {
+                    permissionsListener.onPermissionAccepted();
+                }
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
+
+    protected boolean checkLocationPermission(IPermissionsListener permissionsListener) {
+        this.permissionsListener = permissionsListener;
+        return requestLocationPermission();
+    }
+
+    protected boolean checkLocationPermission() {
+        return requestLocationPermission();
+    }
+
+    private static boolean hasPermissions(Context context, String... permissions) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(permissionsListener != null ) {
+            Map<String, Integer> expectedPermissions = new HashMap<>();
+            if(requestCode == LOCATION_PERMISSION_REQUEST) {
+                expectedPermissions.put(Manifest.permission.ACCESS_COARSE_LOCATION, PackageManager.PERMISSION_GRANTED);
+                expectedPermissions.put(Manifest.permission.ACCESS_FINE_LOCATION, PackageManager.PERMISSION_GRANTED);
+                for (int i = 0; i < permissions.length; i++) {
+                    expectedPermissions.put(permissions[i], grantResults[i]);
+                }
+                if (arePermissionsGranted(expectedPermissions)) {
+                    permissionsListener.onPermissionAccepted();
+                    return;
+                }
+                if (!shouldShowRequestPermissionRationale(expectedPermissions)) {
+                    permissionsListener.onPermissionDenied();
+                    return;
+                }
+                permissionsListener.onPermissionDenied();
+            } else {
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    public boolean shouldShowRequestPermissionRationale(Map<String, Integer> expectedPermissions) {
+        for (String permission : expectedPermissions.keySet()) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected boolean arePermissionsGranted(Map<String, Integer> expectedPermissions) {
+        for (Integer result : expectedPermissions.values()) {
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 }
