@@ -121,22 +121,24 @@ public class PmzMenuActivity extends PmzBaseActivity {
     }
 
     private void setStoreData() {
-        ImageView image = findViewById(R.id.image);
-        ImageView icon = findViewById(R.id.icon);
-        TextView title = findViewById(R.id.title);
-        TextView description = findViewById(R.id.description);
+        if(store != null) {
+            ImageView image = findViewById(R.id.image);
+            ImageView icon = findViewById(R.id.icon);
+            TextView title = findViewById(R.id.title);
+            TextView description = findViewById(R.id.description);
 
-        ImageUtils.loadStoreImage(this, image, store.getImageUrl());
-        ImageUtils.loadStoreImage(this, icon, store.getImageUrl());
+            ImageUtils.loadStoreImage(this, image, store.getImageUrl());
+            ImageUtils.loadStoreImage(this, icon, store.getImageUrl());
 
-        title.setText(store.getName());
-        description.setText(store.getCommerceName());
+            title.setText(store.getName());
+            description.setText(store.getCommerceName());
 
-        if(PaymentezSDK.getInstance().getStyle().getTextColor() != null) {
-            title.setTextColor(PaymentezSDK.getInstance().getStyle().getTextColor());
-            description.setTextColor(PaymentezSDK.getInstance().getStyle().getTextColor());
+            if (PaymentezSDK.getInstance().getStyle().getTextColor() != null) {
+                title.setTextColor(PaymentezSDK.getInstance().getStyle().getTextColor());
+                description.setTextColor(PaymentezSDK.getInstance().getStyle().getTextColor());
+            }
+            checkForDistance();
         }
-        checkForDistance();
     }
 
     private void checkForDistance() {
