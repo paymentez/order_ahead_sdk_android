@@ -8,16 +8,20 @@ import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.paymentez.plazez.sdk.R;
 import com.paymentez.plazez.sdk.styles.PmzFont;
 import com.paymentez.plazez.sdk.utils.TypefaceUtils;
@@ -83,6 +87,17 @@ public class PmzBaseActivity extends AppCompatActivity {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(color);
+        }
+    }
+
+    protected void changeCollapseIconColor(final Integer color) {
+        if(toolbar != null) {
+            Drawable drawable = AppCompatResources.getDrawable(this, R.drawable.searchview_back);
+            if(drawable != null) {
+                drawable.mutate();
+                drawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+                toolbar.setCollapseIcon(drawable);
+            }
         }
     }
 

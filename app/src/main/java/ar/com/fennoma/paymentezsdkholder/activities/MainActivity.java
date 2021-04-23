@@ -258,6 +258,8 @@ public class MainActivity extends BaseActivity {
                 .setButtonBackgroundColor(buttonColorSelected.getColorRes())
                 .setTextColor(textColorSelected.getColorRes())
                 .setButtonTextColor(buttonTextColorSelected.getColorRes())
+                .setHeaderBackgroundColor(getResources().getColor(android.R.color.holo_green_dark))
+                .setHeaderTextColor(getResources().getColor(android.R.color.darker_gray))
                 .setFont(PmzFont.ROBOTO);
     }
 

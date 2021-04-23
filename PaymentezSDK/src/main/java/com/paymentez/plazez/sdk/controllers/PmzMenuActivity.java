@@ -2,6 +2,7 @@ package com.paymentez.plazez.sdk.controllers;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -128,7 +129,7 @@ public class PmzMenuActivity extends PmzBaseActivity {
             TextView description = findViewById(R.id.description);
 
             ImageUtils.loadStoreImage(this, image, store.getImageUrl());
-            ImageUtils.loadStoreImage(this, icon, store.getImageUrl());
+            ImageUtils.loadStoreImage(this, icon, store.getCommerceImage());
 
             title.setText(store.getName());
             description.setText(store.getCommerceName());
@@ -278,14 +279,19 @@ public class PmzMenuActivity extends PmzBaseActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ColorHelper.replaceButtonBackground(findViewById(R.id.chart_button), buttonBackgroundColor);
             }
-            changeToolbarBackground(buttonBackgroundColor);
             CollapsingToolbarLayout collapsing = findViewById(R.id.collapsing_toolbar);
             collapsing.setContentScrimColor(buttonBackgroundColor);
         }
         if(PaymentezSDK.getInstance().getStyle().getButtonTextColor() != null) {
             TextView next = findViewById(R.id.chart_button);
             next.setTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
-            changeToolbarTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
+        }
+        if(PaymentezSDK.getInstance().getStyle().getHeaderBackgroundColor() != null) {
+            changeToolbarBackground(PaymentezSDK.getInstance().getStyle().getHeaderBackgroundColor());
+        }
+        if(PaymentezSDK.getInstance().getStyle().getHeaderTextColor() != null) {
+            changeToolbarTextColor(PaymentezSDK.getInstance().getStyle().getHeaderTextColor());
+            changeCollapseIconColor(PaymentezSDK.getInstance().getStyle().getHeaderTextColor());
         }
         setButtons();
         setPager();
@@ -452,6 +458,19 @@ public class PmzMenuActivity extends PmzBaseActivity {
         EditText editText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         editText.setTextColor(Color.WHITE);
         editText.setHintTextColor(Color.WHITE);
+        if(PaymentezSDK.getInstance().getStyle().getHeaderTextColor() != null) {
+            editText.setTextColor(PaymentezSDK.getInstance().getStyle().getHeaderTextColor());
+            editText.setHintTextColor(PaymentezSDK.getInstance().getStyle().getHeaderTextColor());
+            if(myActionMenuItem.getIcon() != null) {
+                myActionMenuItem.getIcon().mutate();
+                myActionMenuItem.getIcon().setColorFilter(PaymentezSDK.getInstance().getStyle().getHeaderTextColor(), PorterDuff.Mode.SRC_ATOP);
+            }
+            MenuItem cartItem = menu.findItem(R.id.cart);
+            if(cartItem.getIcon() != null) {
+                cartItem.getIcon().mutate();
+                cartItem.getIcon().setColorFilter(PaymentezSDK.getInstance().getStyle().getHeaderTextColor(), PorterDuff.Mode.SRC_ATOP);
+            }
+        }
         return true;
     }
 

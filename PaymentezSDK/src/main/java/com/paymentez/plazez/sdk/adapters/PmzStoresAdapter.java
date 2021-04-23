@@ -48,7 +48,7 @@ public class PmzStoresAdapter extends RecyclerView.Adapter<PmzStoresAdapter.PmzS
     public void onBindViewHolder(@NonNull final PmzStoreHolder holder, int position) {
         PmzStore store = stores.get(position);
         ImageUtils.loadStoreImage(activity, holder.image, store.getImageUrl());
-        ImageUtils.loadStoreImage(activity, holder.icon, store.getImageUrl());
+        ImageUtils.loadStoreImage(activity, holder.icon, store.getCommerceImage());
 
         holder.title.setText(store.getName());
         holder.description.setText(store.getCommerceName());

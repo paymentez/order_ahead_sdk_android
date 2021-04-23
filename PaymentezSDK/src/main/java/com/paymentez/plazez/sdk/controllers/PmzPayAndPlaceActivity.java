@@ -80,13 +80,15 @@ public class PmzPayAndPlaceActivity extends PmzBaseActivity {
             text.setTextColor(PaymentezSDK.getInstance().getStyle().getTextColor());
         }
         if(PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor() != null) {
-            changeToolbarBackground(PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor());
             ProgressBar progress = findViewById(R.id.progress);
             progress.getIndeterminateDrawable().setColorFilter(PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor(),
                     PorterDuff.Mode.SRC_IN);
         }
-        if(PaymentezSDK.getInstance().getStyle().getButtonTextColor() != null) {
-            changeToolbarTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
+        if(PaymentezSDK.getInstance().getStyle().getHeaderBackgroundColor() != null) {
+            changeToolbarBackground(PaymentezSDK.getInstance().getStyle().getHeaderBackgroundColor());
+        }
+        if(PaymentezSDK.getInstance().getStyle().getHeaderTextColor() != null) {
+            changeToolbarTextColor(PaymentezSDK.getInstance().getStyle().getHeaderTextColor());
         }
     }
 

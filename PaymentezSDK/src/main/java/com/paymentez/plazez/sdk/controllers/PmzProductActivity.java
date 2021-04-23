@@ -162,12 +162,16 @@ public class PmzProductActivity extends PmzBaseActivity {
         if(PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor() != null) {
             ColorHelper.replaceButtonBackground(findViewById(R.id.next),
                     PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor());
-            changeToolbarBackground(PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor());
         }
         if(PaymentezSDK.getInstance().getStyle().getButtonTextColor() != null) {
             TextView next = findViewById(R.id.next);
             next.setTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
-            changeToolbarTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
+        }
+        if(PaymentezSDK.getInstance().getStyle().getHeaderBackgroundColor() != null) {
+            changeToolbarBackground(PaymentezSDK.getInstance().getStyle().getHeaderBackgroundColor());
+        }
+        if(PaymentezSDK.getInstance().getStyle().getHeaderTextColor() != null) {
+            changeToolbarTextColor(PaymentezSDK.getInstance().getStyle().getHeaderTextColor());
         }
         setButtons();
     }
