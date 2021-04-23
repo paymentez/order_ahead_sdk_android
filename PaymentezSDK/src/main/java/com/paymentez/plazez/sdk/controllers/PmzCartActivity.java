@@ -94,7 +94,7 @@ public class PmzCartActivity extends AbstractSwiperContainerActivity<PmzItem, Pm
         TextView description = findViewById(R.id.description);
 
         if(store != null) {
-            ImageUtils.loadStoreImage(this, icon, store.getImageUrl());
+            ImageUtils.loadStoreImage(this, icon, store.getCommerceImage());
 
             title.setText(store.getName());
             description.setText(store.getCommerceName());
@@ -118,19 +118,22 @@ public class PmzCartActivity extends AbstractSwiperContainerActivity<PmzItem, Pm
                 background.setBackgroundColor(style.getBackgroundColor());
             }
             if (style.getButtonBackgroundColor() != null) {
-                changeToolbarBackground(style.getButtonBackgroundColor());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     ColorHelper.replaceButtonBackground(findViewById(R.id.next), style.getButtonBackgroundColor());
                     ColorHelper.replaceButtonBackground(findViewById(R.id.keep_buying), style.getButtonBackgroundColor());
                 }
-                changeToolbarBackground(style.getButtonBackgroundColor());
             }
             if (style.getButtonTextColor() != null) {
                 TextView next = findViewById(R.id.next);
                 TextView keepBuying = findViewById(R.id.keep_buying);
                 next.setTextColor(style.getButtonTextColor());
                 keepBuying.setTextColor(style.getButtonTextColor());
-                changeToolbarTextColor(style.getButtonTextColor());
+            }
+            if(style.getHeaderBackgroundColor() != null) {
+                changeToolbarBackground(style.getHeaderBackgroundColor());
+            }
+            if(style.getHeaderTextColor() != null) {
+                changeToolbarTextColor(style.getHeaderTextColor());
             }
         }
         setRecycler();

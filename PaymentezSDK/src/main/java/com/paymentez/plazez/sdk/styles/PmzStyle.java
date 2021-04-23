@@ -7,6 +7,8 @@ public class PmzStyle {
     private Integer textColor;
     private Integer buttonBackgroundColor;
     private Integer buttonTextColor;
+    private Integer headerBackgroundColor;
+    private Integer headerTextColor;
 
     public Integer getButtonBackgroundColor() {
         return buttonBackgroundColor;
@@ -50,6 +52,24 @@ public class PmzStyle {
 
     public PmzStyle setFont(PmzFont font) {
         this.font = font;
+        return this;
+    }
+
+    public Integer getHeaderBackgroundColor() {
+        return headerBackgroundColor;
+    }
+
+    public PmzStyle setHeaderBackgroundColor(Integer headerBackgroundColor) {
+        this.headerBackgroundColor = headerBackgroundColor;
+        return this;
+    }
+
+    public Integer getHeaderTextColor() {
+        return headerTextColor;
+    }
+
+    public PmzStyle setHeaderTextColor(Integer headerTextColor) {
+        this.headerTextColor = headerTextColor;
         return this;
     }
 }

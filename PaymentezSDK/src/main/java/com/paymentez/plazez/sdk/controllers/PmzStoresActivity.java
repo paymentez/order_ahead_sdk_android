@@ -2,6 +2,8 @@ package com.paymentez.plazez.sdk.controllers;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -136,11 +138,12 @@ public class PmzStoresActivity extends PmzBaseActivity {
             View background = findViewById(R.id.background);
             background.setBackgroundColor(PaymentezSDK.getInstance().getStyle().getBackgroundColor());
         }
-        if(PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor() != null) {
-            changeToolbarBackground(PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor());
+        if(PaymentezSDK.getInstance().getStyle().getHeaderBackgroundColor() != null) {
+            changeToolbarBackground(PaymentezSDK.getInstance().getStyle().getHeaderBackgroundColor());
         }
-        if(PaymentezSDK.getInstance().getStyle().getButtonTextColor() != null) {
-            changeToolbarTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
+        if(PaymentezSDK.getInstance().getStyle().getHeaderTextColor() != null) {
+            changeToolbarTextColor(PaymentezSDK.getInstance().getStyle().getHeaderTextColor());
+            changeCollapseIconColor(PaymentezSDK.getInstance().getStyle().getHeaderTextColor());
         }
         setRecyclerView();
     }
@@ -231,6 +234,15 @@ public class PmzStoresActivity extends PmzBaseActivity {
         EditText editText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         editText.setTextColor(Color.WHITE);
         editText.setHintTextColor(Color.WHITE);
+        if(PaymentezSDK.getInstance().getStyle().getHeaderTextColor() != null) {
+            editText.setTextColor(PaymentezSDK.getInstance().getStyle().getHeaderTextColor());
+            editText.setHintTextColor(PaymentezSDK.getInstance().getStyle().getHeaderTextColor());
+            Drawable drawable = myActionMenuItem.getIcon();
+            if(drawable != null) {
+                drawable.mutate();
+                drawable.setColorFilter(PaymentezSDK.getInstance().getStyle().getHeaderTextColor(), PorterDuff.Mode.SRC_ATOP);
+            }
+        }
         return true;
     }
 }

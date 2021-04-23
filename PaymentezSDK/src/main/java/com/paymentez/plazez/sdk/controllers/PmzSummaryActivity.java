@@ -102,12 +102,16 @@ public class PmzSummaryActivity extends PmzBaseActivity {
                     ColorHelper.replaceButtonBackground(findViewById(R.id.next),
                             style.getButtonBackgroundColor());
                 }
-                changeToolbarBackground(style.getButtonBackgroundColor());
             }
             if (style.getButtonTextColor() != null) {
                 TextView next = findViewById(R.id.next);
                 next.setTextColor(style.getButtonTextColor());
-                changeToolbarTextColor(style.getButtonTextColor());
+            }
+            if(PaymentezSDK.getInstance().getStyle().getHeaderBackgroundColor() != null) {
+                changeToolbarBackground(PaymentezSDK.getInstance().getStyle().getHeaderBackgroundColor());
+            }
+            if(PaymentezSDK.getInstance().getStyle().getHeaderTextColor() != null) {
+                changeToolbarTextColor(PaymentezSDK.getInstance().getStyle().getHeaderTextColor());
             }
         }
         setRecycler();

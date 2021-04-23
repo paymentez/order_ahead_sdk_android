@@ -53,12 +53,16 @@ public class PmzResultActivity extends PmzBaseActivity {
                 ColorHelper.replaceButtonBackground(findViewById(R.id.back),
                         PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor());
             }
-            changeToolbarBackground(PaymentezSDK.getInstance().getStyle().getButtonBackgroundColor());
         }
         if(PaymentezSDK.getInstance().getStyle().getButtonTextColor() != null) {
             TextView back = findViewById(R.id.back);
             back.setTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
-            changeToolbarTextColor(PaymentezSDK.getInstance().getStyle().getButtonTextColor());
+        }
+        if(PaymentezSDK.getInstance().getStyle().getHeaderBackgroundColor() != null) {
+            changeToolbarBackground(PaymentezSDK.getInstance().getStyle().getHeaderBackgroundColor());
+        }
+        if(PaymentezSDK.getInstance().getStyle().getHeaderTextColor() != null) {
+            changeToolbarTextColor(PaymentezSDK.getInstance().getStyle().getHeaderTextColor());
         }
         setButtons();
     }
