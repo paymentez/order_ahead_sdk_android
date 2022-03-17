@@ -10,11 +10,12 @@
 
 #Step 2. Add the dependency
 
-dependencies {
-
-	        implementation 'com.github.paymentez:order_ahead_sdk_android:0.4.1'
+	dependencies{
 	
-  }
+		 	implementation 'com.github.paymentez:order_ahead_sdk_android:0.4.2' 
+		 
+	}
+	
 
 ###Integration
 
