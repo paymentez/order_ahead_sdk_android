@@ -8,7 +8,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 32
         versionCode 16
-        versionName "0.4.1"
+        versionName "0.4.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -29,6 +29,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.3'
     implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
     implementation project(path: ':PaymentezSDK')
+//    implementation 'com.github.paymentez:order_ahead_sdk_android:0.4.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

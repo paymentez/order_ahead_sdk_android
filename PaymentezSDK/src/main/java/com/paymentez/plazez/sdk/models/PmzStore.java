@@ -4,12 +4,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.paymentez.plazez.sdk.utils.GpsManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class PmzStore implements Parcelable {
@@ -49,110 +52,119 @@ public class PmzStore implements Parcelable {
     private PmzSponsor sponsor;
 
     public static List<PmzStore> fromJSONArray(JSONArray json) {
-        List<PmzStore> store = new ArrayList<>();
-        if(json != null) {
-            for(int i = 0; i < json.length(); i++) {
+        List<PmzStore> stores = new ArrayList<>();
+        if (json != null) {
+            for (int i = 0; i < json.length(); i++) {
                 try {
-                    store.add(fromJSONObject(json.getJSONObject(i)));
+                    stores.add(fromJSONObject(json.getJSONObject(i)));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         }
-        return store;
+
+        Collections.sort(stores, new Comparator<PmzStore>() {
+            @Override
+            public int compare(PmzStore p0, PmzStore p1) {
+                return GpsManager.getInstance().getDistanceFromCurrent(p0).
+                        compareTo(GpsManager.getInstance().getDistanceFromCurrent(p1));
+            }
+        });
+
+        return stores;
     }
 
     public static PmzStore fromJSONObject(JSONObject json) {
         PmzStore store = new PmzStore();
-        if(json != null) {
+        if (json != null) {
             try {
-                if(json.has("id")) {
+                if (json.has("id")) {
                     store.setId(json.getLong("id"));
                 }
-                if(json.has("name")) {
+                if (json.has("name")) {
                     store.setName(json.getString("name"));
                 }
-                if(json.has("address")) {
+                if (json.has("address")) {
                     store.setAddress(json.getString("address"));
                 }
-                if(json.has("lat") && !json.isNull("lat")) {
+                if (json.has("lat") && !json.isNull("lat")) {
                     store.setLatitude(json.getDouble("lat"));
                 }
-                if(json.has("lon") && !json.isNull("lon")) {
+                if (json.has("lon") && !json.isNull("lon")) {
                     store.setLongitude(json.getDouble("lon"));
                 }
-                if(json.has("country")) {
+                if (json.has("country")) {
                     store.setCountry(json.getString("country"));
                 }
-                if(json.has("city")) {
+                if (json.has("city")) {
                     store.setCity(json.getString("city"));
                 }
-                if(json.has("website") && !json.isNull("website")) {
+                if (json.has("website") && !json.isNull("website")) {
                     store.setWebsite(json.getString("website"));
                 }
-                if(json.has("phone") && !json.isNull("phone")) {
+                if (json.has("phone") && !json.isNull("phone")) {
                     store.setPhone(json.getString("phone"));
                 }
-                if(json.has("image") && !json.isNull("image")) {
+                if (json.has("image") && !json.isNull("image")) {
                     store.setImageUrl(json.getString("image"));
                 }
-                if(json.has("enable_pay_at_the_table_orders") && !json.isNull("enable_pay_at_the_table_orders")) {
+                if (json.has("enable_pay_at_the_table_orders") && !json.isNull("enable_pay_at_the_table_orders")) {
                     store.setEnablePayAtTheTableOrders(json.getBoolean("enable_pay_at_the_table_orders"));
                 } else {
                     store.setEnablePayAtTheTableOrders(false);
                 }
-                if(json.has("type") && !json.isNull("type")) {
+                if (json.has("type") && !json.isNull("type")) {
                     store.setType(json.getInt("type"));
                 }
-                if(json.has("commerce_image") && !json.isNull("commerce_image")) {
+                if (json.has("commerce_image") && !json.isNull("commerce_image")) {
                     store.setCommerceImage(json.getString("commerce_image"));
                 }
-                if(json.has("commerce_id") && !json.isNull("commerce_id")) {
+                if (json.has("commerce_id") && !json.isNull("commerce_id")) {
                     store.setCommerceId(json.getLong("commerce_id"));
                 }
-                if(json.has("commerce_fiscal_number") && !json.isNull("commerce_fiscal_number")) {
+                if (json.has("commerce_fiscal_number") && !json.isNull("commerce_fiscal_number")) {
                     store.setCommerceFiscalNumber(json.getString("commerce_fiscal_number"));
                 }
-                if(json.has("subsidiary_id") && !json.isNull("subsidiary_id")) {
+                if (json.has("subsidiary_id") && !json.isNull("subsidiary_id")) {
                     store.setSubsidiaryId(json.getLong("subsidiary_id"));
                 }
-                if(json.has("zip_code") && !json.isNull("zip_code")) {
+                if (json.has("zip_code") && !json.isNull("zip_code")) {
                     store.setZipCode(json.getString("zip_code"));
                 }
-                if(json.has("company_name") && !json.isNull("company_name")) {
+                if (json.has("company_name") && !json.isNull("company_name")) {
                     store.setCompanyName(json.getString("company_name"));
                 }
-                if(json.has("status") && !json.isNull("status")) {
+                if (json.has("status") && !json.isNull("status")) {
                     store.setStatus(json.getInt("status"));
                 }
-                if(json.has("commerce_paymentez_app_code") && !json.isNull("commerce_paymentez_app_code")) {
+                if (json.has("commerce_paymentez_app_code") && !json.isNull("commerce_paymentez_app_code")) {
                     store.setCommercePaymentezAppCode(json.getString("commerce_paymentez_app_code"));
                 }
-                if(json.has("internal_name") && !json.isNull("internal_name")) {
+                if (json.has("internal_name") && !json.isNull("internal_name")) {
                     store.setInternalName(json.getString("internal_name"));
                 }
-                if(json.has("commerce_name") && !json.isNull("commerce_name")) {
+                if (json.has("commerce_name") && !json.isNull("commerce_name")) {
                     store.setCommerceName(json.getString("commerce_name"));
                 }
-                if(json.has("show_stock") && !json.isNull("show_stock")) {
+                if (json.has("show_stock") && !json.isNull("show_stock")) {
                     store.setShowStock(json.getBoolean("show_stock"));
                 }
-                if(json.has("print") && !json.isNull("print")) {
+                if (json.has("print") && !json.isNull("print")) {
                     store.setPrint(json.getString("print"));
                 }
-                if(json.has("menu_id") && !json.isNull("menu_id")) {
+                if (json.has("menu_id") && !json.isNull("menu_id")) {
                     store.setMenuId(json.getLong("menu_id"));
                 }
-                if(json.has("delivery_price") && !json.isNull("delivery_price")) {
+                if (json.has("delivery_price") && !json.isNull("delivery_price")) {
                     store.setDeliveryPrice(json.getDouble("delivery_price"));
                 }
-                if(json.has("max_delivery_distance") && !json.isNull("max_delivery_distance")) {
+                if (json.has("max_delivery_distance") && !json.isNull("max_delivery_distance")) {
                     store.setMaxDeliveryDistance(json.getInt("max_delivery_distance"));
                 }
-                if(json.has("time_preparing") && !json.isNull("time_preparing")) {
+                if (json.has("time_preparing") && !json.isNull("time_preparing")) {
                     store.setTimePreparing(json.getInt("time_preparing"));
                 }
-                if(json.has("accept_delivery") && !json.isNull("accept_delivery")) {
+                if (json.has("accept_delivery") && !json.isNull("accept_delivery")) {
                     store.setAcceptsDelivery(json.getBoolean("accept_delivery"));
                 } else {
                     store.setAcceptsDelivery(false);
@@ -160,13 +172,13 @@ public class PmzStore implements Parcelable {
                 /*if(json.has("extra_payments_codes") && !json.isNull("extra_payments_codes")) {
                     store.setExtraPaymentCodes(new ArrayList<String>());
                 }*/
-                if(json.has("server_app_code") && !json.isNull("server_app_code")) {
+                if (json.has("server_app_code") && !json.isNull("server_app_code")) {
                     store.setServerAppCode(json.getString("server_app_code"));
                 }
-                if(json.has("clien_app_code") && !json.isNull("clien_app_code")) {
+                if (json.has("clien_app_code") && !json.isNull("clien_app_code")) {
                     store.setClientAppCode(json.getString("clien_app_code"));
                 }
-                if(json.has("sponsor") && !json.isNull("sponsor")) {
+                if (json.has("sponsor") && !json.isNull("sponsor")) {
                     store.setSponsor(PmzSponsor.fromJSONObject(json.getJSONObject("sponsor")));
                 }
             } catch (JSONException e) {
@@ -436,7 +448,7 @@ public class PmzStore implements Parcelable {
     }
 
     public LatLng getLatLng() {
-        if(getLatitude() != null && getLongitude() != null) {
+        if (getLatitude() != null && getLongitude() != null) {
             return new LatLng(getLatitude(), getLongitude());
         } else {
             return null;
